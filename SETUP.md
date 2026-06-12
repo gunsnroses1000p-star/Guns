@@ -5,24 +5,35 @@
 ```
 .
 ├── backend/
-│   ├── main.py              # FastAPI app with Replicate integration
+│   ├── main.py              # FastAPI app with Hugging Face integration
 │   ├── requirements.txt      # Python dependencies
 │   └── .env.example         # Environment template
-└── frontend/
-    ├── src/
-    │   ├── App.js           # Main React component
-    │   ├── App.css          # Styling
-    │   └── index.js         # React entry point
-    ├── public/
-    │   └── index.html       # HTML template
-    └── package.json         # NPM dependencies
+├── frontend/
+│   ├── src/
+│   │   ├── App.js           # Main React component
+│   │   ├── App.css          # Styling
+│   │   └── index.js         # React entry point
+│   ├── public/
+│   │   └── index.html       # HTML template
+│   └── package.json         # NPM dependencies
+└── generated_videos/        # Output directory for generated videos
 ```
+
+## Features
+
+✅ **100% FREE** - Uses Hugging Face free inference API
+✅ **Image-to-Video** - Convert images into videos
+✅ **Text-to-Video** - Generate videos from text prompts
+✅ **Open Source** - Uses DAMO-VILAB models
+✅ **Beautiful UI** - Modern React interface with gradient design
 
 ## Setup Instructions
 
-### 1. Get Replicate API Key
-- Sign up at https://replicate.com
-- Get your API token from https://replicate.com/account
+### 1. Get Hugging Face API Token (FREE!)
+- Sign up at https://huggingface.co (completely free)
+- Go to https://huggingface.co/settings/tokens
+- Create a new "User Access Token"
+- Copy the token
 
 ### 2. Backend Setup
 
@@ -39,7 +50,7 @@ pip install -r requirements.txt
 
 # Setup environment
 cp .env.example .env
-# Edit .env and add your Replicate API key
+# Edit .env and add your Hugging Face API token
 ```
 
 ### 3. Frontend Setup
@@ -82,23 +93,48 @@ npm start
 ### POST `/generate-video`
 Upload an image file to generate a video
 - **Request**: Multipart form data with image file
-- **Response**: `{"status": "success", "video_url": "..."}`
+- **Response**: `{"status": "success", "video_path": "..."}`
 
 ### POST `/generate-video-from-prompt`
 Generate a video from a text prompt
 - **Query**: `prompt` (string)
-- **Response**: `{"status": "success", "video_url": "..."}`
+- **Response**: `{"status": "success", "video_path": "..."}`
+
+### GET `/video/{file_path}`
+Retrieve a generated video file
 
 ## Technologies Used
 - **Backend**: FastAPI, Python 3.8+
 - **Frontend**: React 18
-- **AI/ML**: Replicate API
+- **AI/ML**: Hugging Face Inference API (FREE)
+- **Models**: DAMO-VILAB (Open Source)
 - **HTTP Client**: Axios
 
+## Cost
+**COMPLETELY FREE!** 🎉
+- No credit card required for Hugging Face
+- Unlimited free API calls
+- Open-source models
+
 ## Notes
-- Videos are generated using Replicate's image-to-video models
-- Generation time depends on the model and current API load
-- API requires internet connection for Replicate integration
+- Videos are generated using Hugging Face's free inference API
+- Generation time depends on model complexity and current API load
+- Internet connection required for API calls
+- Videos are saved locally in `generated_videos/` directory
+
+## Troubleshooting
+
+**"Model is loading" error:**
+- First-time model loads take longer (1-2 minutes)
+- Wait a bit and try again
+
+**"Unauthorized" error:**
+- Check your HF_API_TOKEN in `.env`
+- Make sure token has proper permissions
+
+**Generation takes too long:**
+- Hugging Face free API sometimes has queues
+- Models are loaded on-demand, first request takes longer
 
 ## License
 MIT

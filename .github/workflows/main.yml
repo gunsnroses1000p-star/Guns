@@ -19,14 +19,14 @@ jobs:
           python-version: "3.11"
 
       - name: Install requirements
-  run: pip install -r requirements.txt
+         run: pip install -r requirements.txt
 
       - name: Test app
         run: python app.py
 
-- name: Upload image
-  uses: actions/upload-artifact@v4
-  with:
-    name: generated-image
-    path: output.png
+      - name: Upload image
+        uses: actions/upload-artifact@v4
+        with:
+        name: generated-image
+        path: output.png
         

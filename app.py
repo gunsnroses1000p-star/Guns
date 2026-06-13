@@ -8,7 +8,7 @@ headers = {
     "Authorization": f"Bearer {HF_TOKEN}"
 }
 
-prompt = "prompt = "a cozy cabin in a snowy forest at sunset, photorealistic"
+prompt =  "a cozy cabin in a snowy forest at sunset, photorealistic"
 
 response = requests.post(
     API_URL,

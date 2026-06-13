@@ -2,3 +2,4 @@ gradio
 huggingface_hub
 requests
 python-dotenv
+Pillow

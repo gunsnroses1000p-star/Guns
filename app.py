@@ -1,3 +1,5 @@
+image1_path = "in_painting_1781014281355.jpg"
+image2_path = "Screenshot_20260614_025608_AIReel.jpg"
 import os
 import requests
 

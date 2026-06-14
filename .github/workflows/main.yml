@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      FAL_KEY: ${{ secrets.FAL_KEY }}
 
     steps:
       - uses: actions/checkout@v4

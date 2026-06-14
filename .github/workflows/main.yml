@@ -24,9 +24,9 @@ jobs:
       - name: Test app
         run: python app.py
 
-      - name: Upload image
+      - name: merged image
         uses: actions/upload-artifact@v4
         with:
-          name: generated-image
-          path: output.png
+          name: merged-image
+          path: merged_input.jpg
         

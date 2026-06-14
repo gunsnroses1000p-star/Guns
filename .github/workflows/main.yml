@@ -28,5 +28,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: merged-image
-          path: merged_input.jpg
+          path: merged_output.jpg
         

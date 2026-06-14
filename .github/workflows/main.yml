@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: set up python 
-        uses: actions/setup-python@v5
+        uses: actions/setup-artifact@v5
         with:
          python-version: "3.11"
 
@@ -26,5 +26,9 @@ jobs:
       - name: Test merge
         run: python nightclub_ai.py
 
-      
+      - name: Upload nightclub image
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightclub-image
+          path: nightclub_output.jpg
         

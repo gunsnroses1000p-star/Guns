@@ -1,3 +1,9 @@
+name: Test AI App
+
+on:
+  workflow_dispatch:
+  push:
+
 jobs:
   test:
     runs-on: ubuntu-latest

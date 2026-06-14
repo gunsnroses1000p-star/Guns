@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      FAL_KEY: ${{ secrets.FAL_KEY }}
-
-    steps:
+     HF_TOKEN: ${{ secrets.HF_TOKEN }}
+     FAL_KEY: ${{ secrets.FAL_KEY }}
+     
       - uses: actions/checkout@v4
 
       - name: Set up Python

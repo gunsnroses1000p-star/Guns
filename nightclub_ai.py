@@ -1,4 +1,5 @@
 import os
+import requests
 import fal_client
 
 FAL_KEY = os.getenv("FAL_KEY")
@@ -6,12 +7,36 @@ FAL_KEY = os.getenv("FAL_KEY")
 if not FAL_KEY:
     raise ValueError("FAL_KEY secret is missing")
 
-image1_path = "in_painting_1781014281355.jpg"
-image2_path = "Screenshot_20260614_025608_AIReel.jpg"
+image_url = "https://i.postimg.cc/jdSN4Q39/merged-output.jpg"
 
-image1_url = "https://i.postimg.cc/HWP9rhBw/Screenshot-20260614-145349-Pinterest.jpg"
-image2_url = "https://i.postimg.cc/pdZDRGmB/output.jpg"
+prompt = """
+Transform the reference image into a photorealistic nightclub scene.
+Create one seamless image featuring both people from the reference image together in the same nightclub.
+They are standing close together on a crowded dance floor, smiling and dancing naturally.
+Use stylish nightlife clothing, purple and blue neon lights, disco lights, atmospheric haze, realistic shadows, matching lighting on both people, natural body proportions, cinematic photography, high detail.
+"""
 
-print("Image 1 URL:", image1_url)
-print("Image 2 URL:", image2_url)
-print("Both images uploaded to FAL successfully.")
+result = fal_client.subscribe(
+    "fal-ai/flux-kontext/dev",
+    arguments={
+        "prompt": prompt,
+        "image_url": image_url,
+        "num_images": 1,
+        "output_format": "jpeg",
+        "acceleration": "regular"
+    },
+)
+
+print("FAL result:")
+print(result)
+
+generated_url = result["images"][0]["url"]
+print("Generated image URL:", generated_url)
+
+response = requests.get(generated_url)
+response.raise_for_status()
+
+with open("nightclub_output.jpg", "wb") as f:
+    f.write(response.content)
+
+print("Saved nightclub_output.jpg")

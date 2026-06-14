@@ -24,9 +24,5 @@ jobs:
       - name: Test merge
         run: python nightclub_ai.py
 
-      - name: merged image
-        uses: actions/upload-artifact@v4
-        with:
-          name: merged-image
-          path: merged_output.jpg
+      
         

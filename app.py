@@ -8,7 +8,7 @@ headers = {
     "Authorization": f"Bearer {HF_TOKEN}"
 }
 
-prompt = "a giant floating island above the clouds, fantasy art"
+prompt = input("Enter your image prompt: ")
 
 response = requests.post(
     API_URL,

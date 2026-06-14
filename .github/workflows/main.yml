@@ -15,9 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: upload nightclub image
+        uses: actions/upload-python@v4
         with:
+         name: nightclub_image
+         path: nightclub_image.jpg
+         
           python-version: "3.11"
 
       - name: Install requirements

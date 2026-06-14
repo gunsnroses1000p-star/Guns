@@ -1,7 +1,7 @@
 import os
 import requests
 
-HF_TOKEN = "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"
+HF_TOKEN = os.getenv("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")
 
 API_URL = "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell"
 headers = {

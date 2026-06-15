@@ -9,12 +9,13 @@ if not api_token:
 client = replicate.Client(api_token=api_token)
 
 output = client.run(
-    "wan-video/wan-2.2-i2v-fast",
+    "black-forest-labs/flux-kontext-pro",
     input={
-        "image": "https://i.postimg.cc/cJ6gkHXs/in-painting-1781014281355.jpg",
-        "prompt": "Animate this image with subtle natural movement, realistic breathing, slight hair movement, soft cinematic camera push-in, smooth motion, realistic lighting, no distortion."
+        "input_image": "https://i.postimg.cc/LXzwZjGj/1781503790820.jpg",
+        "prompt": "Create one seamless photorealistic image using both people from the reference image. Preserve both faces, hairstyles, skin tones, clothing, and body proportions. Place them naturally together in the same scene with matching lighting, shadows, camera angle, and color grading. Make it look like one real photograph, not a collage."
     }
 )
+
 print("========== OUTPUT ==========")
 print(output)
 print("============================")

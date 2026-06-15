@@ -12,7 +12,7 @@ output = client.run(
     "black-forest-labs/flux-kontext-pro",
     input={
         "input_image": "https://i.postimg.cc/LXzwZjGj/1781503790820.jpg",
-        "prompt": "Create one seamless photorealistic image using both people from the reference image. Preserve both faces, hairstyles, skin tones, clothing, and body proportions. Place them naturally together in the same scene with matching lighting, shadows, camera angle, and color grading. Make it look like one real photograph, not a collage."
+        "prompt": "Transform this side-by-side reference image into one seamless photorealistic portrait of two adults standing together in a modern indoor setting. Preserve their facial features, hairstyles, skin tones, clothing, and natural proportions. Match the lighting, shadows, camera angle, and color grading so it looks like one real photograph, not a collage."
     }
 )
 

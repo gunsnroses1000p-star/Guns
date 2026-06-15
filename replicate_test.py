@@ -12,7 +12,7 @@ output = client.run(
     "wan-video/wan-2.2-i2v-fast",
     input={
         "image": "https://i.postimg.cc/cJ6gkHXs/in-painting-1781014281355.jpg",
-        "prompt": "Animate this image with subtle natural movement, cinematic camera push-in, realistic lighting, smooth motion",
+        "prompt":  "Animate this image with subtle natural movement, realistic breathing, slight hair movement, soft cinematic camera push-in, smooth motion, realistic lighting, no distortion".
     }
 )
 

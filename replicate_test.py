@@ -15,5 +15,3 @@ output = client.run(
         "prompt": "Animate this image with subtle natural movement, realistic breathing, slight hair movement, soft cinematic camera push-in, smooth motion, realistic lighting, no distortion."
     }
 )
-
-print(output)

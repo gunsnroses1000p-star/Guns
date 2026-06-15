@@ -9,9 +9,10 @@ if not api_token:
 client = replicate.Client(api_token=api_token)
 
 output = client.run(
-    "black-forest-labs/flux-schnell",
+    "wan-video/wan-2.2-i2v-fast",
     input={
-        "prompt": "A futuristic city at night with neon lights, cinematic"
+        "image": "https://i.postimg.cc/cJ6gkHXs/in-painting-1781014281355.jpg",
+        "prompt": "Animate this image with subtle natural movement, cinematic camera push-in, realistic lighting, smooth motion",
     }
 )
 

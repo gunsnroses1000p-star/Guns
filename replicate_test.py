@@ -11,8 +11,8 @@ client = replicate.Client(api_token=api_token)
 output = client.run(
     "black-forest-labs/flux-kontext-pro",
     input={
-        "input_image": "https://i.postimg.cc/LXzwZjGj/1781503790820.jpg",
-        "prompt": "Transform this side-by-side reference image into one seamless photorealistic portrait of two adults standing together in a modern indoor setting. Preserve their facial features, hairstyles, skin tones, clothing, and natural proportions. Match the lighting, shadows, camera angle, and color grading so it looks like one real photograph, not a collage."
+        "input_image": "https://i.postimg.cc/pL3PfYcY/1781504506599.jpg",
+        "prompt": "Create one seamless photorealistic image. Preserve all people and blend the scene naturally with realistic lighting, shadows, and color grading."
     }
 )
 

@@ -172,6 +172,21 @@ async function generate() {
             status.innerText = "Done!";
 
             addToGallery(data.image);
+       function loadGallery() {
+    const gallery = document.getElementById("gallery");
+
+    gallery.innerHTML = "";
+
+    galleryImages.forEach(url => {
+        const img = document.createElement("img");
+
+        img.src = url;
+
+        img.onclick = () => window.open(url, "_blank");
+
+        gallery.appendChild(img);
+    });
+       }
         } else {
             status.innerText = "Error: " + (data.error || "No image returned");
         }

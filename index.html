@@ -18,15 +18,18 @@ h1 {
     color: #8a2be2;
 }
 
-textarea {
+textarea, select {
     width: 90%;
     max-width: 600px;
-    height: 120px;
     padding: 10px;
     border-radius: 8px;
     border: none;
     font-size: 16px;
     margin-top: 10px;
+}
+
+textarea {
+    height: 120px;
 }
 
 button, a.download-btn {
@@ -65,10 +68,19 @@ label {
 <h1>My Replicate AI Generator</h1>
 
 <label>Main Prompt</label>
-<textarea id="prompt" placeholder="Type your prompt here...">A cute orange cat sitting on a wooden fence, photorealistic</textarea>
+<textarea id="prompt">A cute orange cat sitting on a wooden fence, photorealistic</textarea>
 
 <label>Negative Prompt</label>
-<textarea id="negative" placeholder="Things to avoid...">blurry, bad anatomy, extra limbs, distorted face, low quality, ugly, watermark, text</textarea>
+<textarea id="negative">blurry, bad anatomy, extra limbs, distorted face, low quality, ugly, watermark, text</textarea>
+
+<label>Aspect Ratio</label>
+<select id="aspect_ratio">
+    <option value="1:1">Square 1:1</option>
+    <option value="16:9">Landscape 16:9</option>
+    <option value="9:16">Portrait 9:16</option>
+    <option value="4:3">Classic 4:3</option>
+    <option value="3:4">Vertical 3:4</option>
+</select>
 
 <br>
 
@@ -88,6 +100,7 @@ label {
 async function generate() {
     const prompt = document.getElementById("prompt").value;
     const negative = document.getElementById("negative").value;
+    const aspect_ratio = document.getElementById("aspect_ratio").value;
     const status = document.getElementById("status");
     const result = document.getElementById("result");
     const downloadBtn = document.getElementById("downloadBtn");
@@ -104,7 +117,8 @@ async function generate() {
             },
             body: JSON.stringify({
                 prompt: prompt,
-                negative: negative
+                negative: negative,
+                aspect_ratio: aspect_ratio
             })
         });
 

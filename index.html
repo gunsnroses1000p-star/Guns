@@ -172,6 +172,7 @@ let promptHistory =
 
 async function generate() {
     const prompt = document.getElementById("prompt").value;
+    const imageInput = document.getElementById("imageInput").value;
     const negative = document.getElementById("negative").value;
     const aspect_ratio = document.getElementById("aspect_ratio").value;
     const style = document.getElementById("style").value;

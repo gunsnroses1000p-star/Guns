@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Replicate AI Generator</title>
+</head>
+<body>
+  <h1>My Replicate AI Generator</h1>
+
+  <textarea id="prompt" rows="6" cols="40" placeholder="Type your prompt here"></textarea>
+  <br><br>
+
+  <button onclick="generate()">Generate</button>
+
+  <p id="status"></p>
+  <img id="result" style="max-width:100%; margin-top:20px;" />
+
+  <script>
+    async function generate() {
+      const prompt = document.getElementById("prompt").value;
+      document.getElementById("status").innerText = "Webpage works. Next we connect Replicate.";
+      console.log(prompt);
+    }
+  </script>
+</body>
+</html>

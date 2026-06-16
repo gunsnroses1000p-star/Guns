@@ -185,6 +185,10 @@ function addToGallery(imageUrl) {
     galleryImages.unshift(imageUrl);
 
     if (galleryImages.length > 8) {
+       localStorage.setItem(
+          "galleryImages",
+          JSON.stringify(galleryImages)
+); 
         galleryImages.pop();
     }
 

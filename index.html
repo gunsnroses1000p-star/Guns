@@ -150,7 +150,7 @@ async function generate() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                prompt: prompt,
+                prompt: prompt + "," + style,
                 negative: negative,
                 aspect_ratio: aspect_ratio
             })

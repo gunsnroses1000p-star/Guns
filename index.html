@@ -207,24 +207,38 @@ async function generate() {
     }
 }
 
-function addToGallery(imageUrl) {
-    galleryImages.unshift(imageUrl);
+function addToGallery(imageUrl, promptText) {
+    galleryImages.unshift({
+        image: imageUrl,
+        prompt: promptText
+    });
 
     if (galleryImages.length > 8) {
         galleryImages.pop();
     }
 
     localStorage.setItem("galleryImages", JSON.stringify(galleryImages));
-    loadGallery();
-}
-
-function loadGallery() {
+    function loadGallery() {
     const gallery = document.getElementById("gallery");
     gallery.innerHTML = "";
 
-    galleryImages.forEach(url => {
+    galleryImages.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "gallery-item";
+
         const img = document.createElement("img");
-        img.src = url;
+        img.src = item.image;
+        img.onclick = () => window.open(item.image, "_blank");
+
+        const text = document.createElement("div");
+        text.className = "gallery-prompt";
+        text.textContent = item.prompt || "";
+
+        div.appendChild(img);
+        div.appendChild(text);
+        gallery.appendChild(div);
+    });
+    }
         img.onclick = () => window.open(url, "_blank");
         gallery.appendChild(img);
     });

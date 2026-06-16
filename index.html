@@ -25,9 +25,11 @@ textarea {
     padding: 10px;
     border-radius: 8px;
     border: none;
+    font-size: 16px;
+    margin-top: 10px;
 }
 
-button {
+button, a.download-btn {
     margin-top: 15px;
     padding: 12px 25px;
     font-size: 16px;
@@ -36,9 +38,11 @@ button {
     background: #8a2be2;
     color: white;
     cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
 }
 
-button:hover {
+button:hover, a.download-btn:hover {
     opacity: 0.9;
 }
 
@@ -47,6 +51,12 @@ img {
     margin-top: 20px;
     border-radius: 12px;
 }
+
+label {
+    display: block;
+    margin-top: 20px;
+    font-size: 18px;
+}
 </style>
 </head>
 
@@ -54,7 +64,12 @@ img {
 
 <h1>My Replicate AI Generator</h1>
 
-<textarea id="prompt" placeholder="Type your prompt here..."></textarea>
+<label>Main Prompt</label>
+<textarea id="prompt" placeholder="Type your prompt here...">A cute orange cat sitting on a wooden fence, photorealistic</textarea>
+
+<label>Negative Prompt</label>
+<textarea id="negative" placeholder="Things to avoid...">blurry, bad anatomy, extra limbs, distorted face, low quality, ugly, watermark, text</textarea>
+
 <br>
 
 <button onclick="generate()">Generate</button>
@@ -63,14 +78,23 @@ img {
 
 <img id="result" />
 
+<br>
+
+<a id="downloadBtn" class="download-btn" style="display:none;" download="ai-image.webp">
+    Download Image
+</a>
+
 <script>
 async function generate() {
     const prompt = document.getElementById("prompt").value;
+    const negative = document.getElementById("negative").value;
     const status = document.getElementById("status");
     const result = document.getElementById("result");
+    const downloadBtn = document.getElementById("downloadBtn");
 
     status.innerText = "Generating...";
     result.src = "";
+    downloadBtn.style.display = "none";
 
     try {
         const response = await fetch("/api/generate", {
@@ -79,7 +103,8 @@ async function generate() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                prompt: prompt
+                prompt: prompt,
+                negative: negative
             })
         });
 
@@ -87,10 +112,11 @@ async function generate() {
 
         if (data.image) {
             result.src = data.image;
+            downloadBtn.href = data.image;
+            downloadBtn.style.display = "inline-block";
             status.innerText = "Done!";
         } else {
-            status.innerText =
-                "Error: " + (data.error || "No image returned");
+            status.innerText = "Error: " + (data.error || "No image returned");
         }
 
     } catch (error) {

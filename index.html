@@ -132,7 +132,10 @@ label {
         🤖 Cyberpunk
     </option>
 </select>
-
+<input
+    id="imageInput"
+    placeholder="Image URL for image-to-image (optional)"
+>
 <br>
 <button onclick="generate()">Generate</button>
 
@@ -175,7 +178,7 @@ async function generate() {
     const status = document.getElementById("status");
     const result = document.getElementById("result");
     const downloadBtn = document.getElementById("downloadBtn");
-
+    const imageInput = document.getElementById("imageInput").value;
     status.innerText = "Generating...";
     result.src = "";
     downloadBtn.style.display = "none";

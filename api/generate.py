@@ -14,10 +14,11 @@ class handler(BaseHTTPRequestHandler):
             body = self.rfile.read(length)
             data = json.loads(body)
 
-            prompt = data.get(
-                "prompt",
-                "A cute orange cat sitting on a wooden fence, photorealistic"
-            )
+            prompt = data.get("prompt", "")
+            negative = data.get("negative", "")
+
+            if negative:
+                prompt = prompt + ". Avoid: " + negative
 
             payload = {
                 "input": {
@@ -46,24 +47,15 @@ class handler(BaseHTTPRequestHandler):
                 result = json.loads(response.read().decode("utf-8"))
 
             output = result.get("output")
-
-            image_url = None
-            if isinstance(output, list) and len(output) > 0:
-                image_url = output[0]
-            elif isinstance(output, str):
-                image_url = output
+            image_url = output[0] if isinstance(output, list) else output
 
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
-            self.wfile.write(json.dumps({
-                "image": image_url
-            }).encode())
+            self.wfile.write(json.dumps({"image": image_url}).encode())
 
         except Exception as e:
             self.send_response(500)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
-            self.wfile.write(json.dumps({
-                "error": str(e)
-            }).encode())
+            self.wfile.write(json.dumps({"error": str(e)}).encode())

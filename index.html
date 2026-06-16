@@ -152,12 +152,31 @@ async function generate() {
 
     try {
         const response = await fetch("/api/generate", {
+            <script>
+let galleryImages =
+    JSON.parse(localStorage.getItem("galleryImages")) || [];
+
+async function generate() {
+    const prompt = document.getElementById("prompt").value;
+    const negative = document.getElementById("negative").value;
+    const aspect_ratio = document.getElementById("aspect_ratio").value;
+    const style = document.getElementById("style").value;
+    const status = document.getElementById("status");
+    const result = document.getElementById("result");
+    const downloadBtn = document.getElementById("downloadBtn");
+
+    status.innerText = "Generating...";
+    result.src = "";
+    downloadBtn.style.display = "none";
+
+    try {
+        const response = await fetch("/api/generate", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                prompt: prompt + "," + style,
+                prompt: prompt + ", " + style,
                 negative: negative,
                 aspect_ratio: aspect_ratio
             })
@@ -172,21 +191,6 @@ async function generate() {
             status.innerText = "Done!";
 
             addToGallery(data.image);
-       function loadGallery() {
-    const gallery = document.getElementById("gallery");
-
-    gallery.innerHTML = "";
-
-    galleryImages.forEach(url => {
-        const img = document.createElement("img");
-
-        img.src = url;
-
-        img.onclick = () => window.open(url, "_blank");
-
-        gallery.appendChild(img);
-    });
-       }
         } else {
             status.innerText = "Error: " + (data.error || "No image returned");
         }
@@ -200,14 +204,20 @@ function addToGallery(imageUrl) {
     galleryImages.unshift(imageUrl);
 
     if (galleryImages.length > 8) {
-       localStorage.setItem(
-          "galleryImages",
-          JSON.stringify(galleryImages)
-); 
         galleryImages.pop();
     }
 
+    localStorage.setItem(
+        "galleryImages",
+        JSON.stringify(galleryImages)
+    );
+
+    loadGallery();
+}
+
+function loadGallery() {
     const gallery = document.getElementById("gallery");
+
     gallery.innerHTML = "";
 
     galleryImages.forEach(url => {
@@ -217,8 +227,9 @@ function addToGallery(imageUrl) {
         gallery.appendChild(img);
     });
 }
+
 loadGallery();
-</script>
+    </script>
 
 </body>
 </html>

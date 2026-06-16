@@ -1,29 +1,31 @@
-image1_path = "in_painting_1781014281355.jpg"
-image2_path = "Screenshot_20260614_025608_AIReel.jpg"
 import os
-import requests
+import json
+import replicate
+from http.server import BaseHTTPRequestHandler
 
-HF_TOKEN = "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"
+class handler(BaseHTTPRequestHandler):
+    def do_POST(self):
+        try:
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length)
+            data = json.loads(body.decode("utf-8"))
 
-API_URL = "https://router.huggingface.co/hf-inference/models/black-forest-labs/FLUX.1-schnell"
-headers = {
-    "Authorization": f"Bearer {HF_TOKEN}"
-}
+            prompt = data.get("prompt", "A beautiful landscape")
 
-prompt = ("a red sports car parked on a mountain road at sunset, photorealistic")
+            output = replicate.run(
+                "black-forest-labs/flux-schnell",
+                input={"prompt": prompt}
+            )
 
-response = requests.post(
-    API_URL,
-    headers=headers,
-    json={"inputs": prompt},
-    timeout=120
-)
+            image_url = output[0] if isinstance(output, list) else str(output)
 
-print("Status:", response.status_code)
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps({"image": image_url}).encode("utf-8"))
 
-if response.status_code != 200:
-    print(response.text)
-else:
-    with open("output.png", "wb") as f:
-        f.write(response.content)
-    print("Image generated successfully: output.png")
+        except Exception as e:
+            self.send_response(500)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(json.dumps({"error": str(e)}).encode("utf-8"))

@@ -162,8 +162,24 @@ label {
 <div id="gallery" class="gallery"></div>
 
 <script>
-let galleryImages =
-    JSON.parse(localStorage.getItem("galleryImages")) || [];
+#history {
+    margin: 20px 0;
+}
+
+.history-item {
+    background: #222;
+    color: white;
+    padding: 10px;
+    margin: 5px auto;
+    max-width: 600px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.history-item:hover {
+    opacity: 0.8;
+}
 
 async function generate() {
     const prompt = document.getElementById("prompt").value;
@@ -190,7 +206,7 @@ async function generate() {
         });
 
         const data = await response.json();
-
+        addToHistory(prompt);
         if (data.image) {
             result.src = data.image;
             downloadBtn.href = data.image;
@@ -233,8 +249,65 @@ function clearGallery() {
     localStorage.removeItem("galleryImages");
 
     loadGallery();
+function addToHistory(prompt) {
+
+    if (!prompt.trim()) return;
+
+    promptHistory = promptHistory.filter(
+        p => p !== prompt
+    );
+
+    promptHistory.unshift(prompt);
+
+    if (promptHistory.length > 10) {
+        promptHistory.pop();
+    }
+
+    localStorage.setItem(
+        "promptHistory",
+        JSON.stringify(promptHistory)
+    );
+
+    loadHistory();
+}
+
+function loadHistory() {
+
+    const history =
+        document.getElementById("history");
+
+    history.innerHTML = "";
+
+    promptHistory.forEach(prompt => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "history-item";
+
+        div.textContent = prompt;
+
+        div.onclick = () => {
+            document.getElementById("prompt").value =
+                prompt;
+        };
+
+        history.appendChild(div);
+    });
+}
+
+function clearHistory() {
+
+    promptHistory = [];
+
+    localStorage.removeItem(
+        "promptHistory"
+    );
+
+    loadHistory();
 }
 loadGallery();
+loadHistory();
 </script>
 
     

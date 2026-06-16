@@ -175,10 +175,11 @@ async function generate() {
     const negative = document.getElementById("negative").value;
     const aspect_ratio = document.getElementById("aspect_ratio").value;
     const style = document.getElementById("style").value;
+    const imageInput = document.getElementById("imageInput").value;
     const status = document.getElementById("status");
     const result = document.getElementById("result");
     const downloadBtn = document.getElementById("downloadBtn");
-    const imageInput = document.getElementById("imageInput").value;
+    
     status.innerText = "Generating...";
     result.src = "";
     downloadBtn.style.display = "none";

@@ -1,25 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>My Replicate AI Generator</title>
-</head>
-<body>
-  <h1>My Replicate AI Generator</h1>
+<script>
+  async function generate() {
+    const prompt = document.getElementById("prompt").value;
+    const status = document.getElementById("status");
+    const result = document.getElementById("result");
 
-  <textarea id="prompt" rows="6" cols="40" placeholder="Type your prompt here"></textarea>
-  <br><br>
+    status.innerText = "Generating...";
+    result.src = "";
 
-  <button onclick="generate()">Generate</button>
+    try {
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ prompt: prompt })
+      });
 
-  <p id="status"></p>
-  <img id="result" style="max-width:100%; margin-top:20px;" />
+      const data = await response.json();
 
-  <script>
-    async function generate() {
-      const prompt = document.getElementById("prompt").value;
-      document.getElementById("status").innerText = "Webpage works. Next we connect Replicate.";
-      console.log(prompt);
+      if (data.image) {
+        result.src = data.image;
+        status.innerText = "Done!";
+      } else {
+        status.innerText = "Error: " + (data.error || "No image returned");
+      }
+    } catch (error) {
+      status.innerText = "Error: " + error.message;
     }
-  </script>
-</body>
-</html>
+  }
+</script>

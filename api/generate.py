@@ -14,15 +14,20 @@ class handler(BaseHTTPRequestHandler):
             body = self.rfile.read(length)
             data = json.loads(body)
 
-            prompt = data.get("prompt", "A cute orange cat, photorealistic")
+            prompt = data.get(
+                "prompt",
+                "A cute orange cat sitting on a wooden fence, photorealistic"
+            )
 
             payload = {
-                "version": "black-forest-labs/flux-schnell",
                 "input": {
                     "prompt": prompt,
+                    "go_fast": True,
+                    "megapixels": "1",
                     "num_outputs": 1,
                     "aspect_ratio": "1:1",
-                    "output_format": "webp"
+                    "output_format": "webp",
+                    "output_quality": 80
                 }
             }
 
@@ -42,15 +47,23 @@ class handler(BaseHTTPRequestHandler):
 
             output = result.get("output")
 
+            image_url = None
+            if isinstance(output, list) and len(output) > 0:
+                image_url = output[0]
+            elif isinstance(output, str):
+                image_url = output
+
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps({
-                "image": output[0] if isinstance(output, list) else output
+                "image": image_url
             }).encode())
 
         except Exception as e:
             self.send_response(500)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
-            self.wfile.write(json.dumps({"error": str(e)}).encode())
+            self.wfile.write(json.dumps({
+                "error": str(e)
+            }).encode())

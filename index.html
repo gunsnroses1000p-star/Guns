@@ -198,7 +198,7 @@ async function generate() {
             downloadBtn.href = data.image;
             downloadBtn.style.display = "inline-block";
             status.innerText = "Done!";
-            addToGallery(data.image);
+            addToGallery(data.image,prompt);
         } else {
             status.innerText = "Error: " + (data.error || "No image returned");
         }

@@ -14,7 +14,7 @@ body {
     padding: 20px;
 }
 
-h1 {
+h1, h2 {
     color: #8a2be2;
 }
 
@@ -45,10 +45,6 @@ button, a.download-btn {
     display: inline-block;
 }
 
-button:hover, a.download-btn:hover {
-    opacity: 0.9;
-}
-
 img {
     max-width: 100%;
     margin-top: 20px;
@@ -59,6 +55,20 @@ label {
     display: block;
     margin-top: 20px;
     font-size: 18px;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.gallery img {
+    width: 140px;
+    border-radius: 10px;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -92,14 +102,16 @@ label {
 
 <br>
 
-<a id="downloadBtn"
-   class="download-btn"
-   style="display:none;"
-   target="_blank">
-   Open Image
+<a id="downloadBtn" class="download-btn" style="display:none;" target="_blank">
+    Open Image
 </a>
 
+<h2>Gallery</h2>
+<div id="gallery" class="gallery"></div>
+
 <script>
+let galleryImages = [];
+
 async function generate() {
     const prompt = document.getElementById("prompt").value;
     const negative = document.getElementById("negative").value;
@@ -132,6 +144,8 @@ async function generate() {
             downloadBtn.href = data.image;
             downloadBtn.style.display = "inline-block";
             status.innerText = "Done!";
+
+            addToGallery(data.image);
         } else {
             status.innerText = "Error: " + (data.error || "No image returned");
         }
@@ -139,6 +153,24 @@ async function generate() {
     } catch (error) {
         status.innerText = "Error: " + error.message;
     }
+}
+
+function addToGallery(imageUrl) {
+    galleryImages.unshift(imageUrl);
+
+    if (galleryImages.length > 8) {
+        galleryImages.pop();
+    }
+
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+
+    galleryImages.forEach(url => {
+        const img = document.createElement("img");
+        img.src = url;
+        img.onclick = () => window.open(url, "_blank");
+        gallery.appendChild(img);
+    });
 }
 </script>
 

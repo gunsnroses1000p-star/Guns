@@ -218,8 +218,10 @@ function addToGallery(imageUrl, promptText) {
     }
 
     localStorage.setItem("galleryImages", JSON.stringify(galleryImages));
-    function loadGallery() {
-    const gallery = document.getElementById("gallery");
+    loadGallery();
+}
+
+function loadGallery() {
     gallery.innerHTML = "";
 
     galleryImages.forEach(item => {

@@ -230,7 +230,10 @@ function clearGallery() {
 
     localStorage.removeItem("galleryImages");
 
-    loadGallery();
+   loadGallery();
+}
+
+
 function addToHistory(prompt) {
 
     if (!prompt.trim()) return;

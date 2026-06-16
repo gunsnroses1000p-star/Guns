@@ -16,6 +16,7 @@ class handler(BaseHTTPRequestHandler):
 
             prompt = data.get("prompt", "")
             negative = data.get("negative", "")
+            aspect_ratio = data.get("aspect_ratio", "1:1")
 
             if negative:
                 prompt = prompt + ". Avoid: " + negative
@@ -26,7 +27,7 @@ class handler(BaseHTTPRequestHandler):
                     "go_fast": True,
                     "megapixels": "1",
                     "num_outputs": 1,
-                    "aspect_ratio": "1:1",
+                    "aspect_ratio": aspect_ratio,
                     "output_format": "webp",
                     "output_quality": 80
                 }

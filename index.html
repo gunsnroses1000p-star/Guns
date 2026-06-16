@@ -1,49 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>My Replicate AI Generator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Replicate AI Generator</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    color: #8a2be2;
+}
+
+textarea {
+    width: 90%;
+    max-width: 600px;
+    height: 120px;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    margin-top: 15px;
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background: #8a2be2;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+img {
+    max-width: 100%;
+    margin-top: 20px;
+    border-radius: 12px;
+}
+</style>
 </head>
+
 <body>
-  <h1>My Replicate AI Generator</h1>
 
-  <textarea id="prompt" rows="6" cols="40" placeholder="Type your prompt here"></textarea>
-  <br><br>
+<h1>My Replicate AI Generator</h1>
 
-  <button onclick="generate()">Generate</button>
+<textarea id="prompt" placeholder="Type your prompt here..."></textarea>
+<br>
 
-  <p id="status"></p>
-  <img id="result" style="max-width:100%; margin-top:20px;" />
+<button onclick="generate()">Generate</button>
 
-  <script>
-    async function generate() {
-      const prompt = document.getElementById("prompt").value;
-      const status = document.getElementById("status");
-      const result = document.getElementById("result");
+<p id="status"></p>
 
-      status.innerText = "Generating...";
-      result.src = "";
+<img id="result" />
 
-      try {
+<script>
+async function generate() {
+    const prompt = document.getElementById("prompt").value;
+    const status = document.getElementById("status");
+    const result = document.getElementById("result");
+
+    status.innerText = "Generating...";
+    result.src = "";
+
+    try {
         const response = await fetch("/api/generate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ prompt: prompt })
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                prompt: prompt
+            })
         });
 
         const data = await response.json();
 
         if (data.image) {
-          result.src = data.image;
-          status.innerText = "Done!";
+            result.src = data.image;
+            status.innerText = "Done!";
         } else {
-          status.innerText = "Error: " + (data.error || "No image returned");
+            status.innerText =
+                "Error: " + (data.error || "No image returned");
         }
-      } catch (error) {
+
+    } catch (error) {
         status.innerText = "Error: " + error.message;
-      }
     }
-  </script>
+}
+</script>
+
 </body>
 </html>

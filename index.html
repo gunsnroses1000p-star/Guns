@@ -1,31 +1,49 @@
-<script>
-  async function generate() {
-    const prompt = document.getElementById("prompt").value;
-    const status = document.getElementById("status");
-    const result = document.getElementById("result");
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Replicate AI Generator</title>
+</head>
+<body>
+  <h1>My Replicate AI Generator</h1>
 
-    status.innerText = "Generating...";
-    result.src = "";
+  <textarea id="prompt" rows="6" cols="40" placeholder="Type your prompt here"></textarea>
+  <br><br>
 
-    try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ prompt: prompt })
-      });
+  <button onclick="generate()">Generate</button>
 
-      const data = await response.json();
+  <p id="status"></p>
+  <img id="result" style="max-width:100%; margin-top:20px;" />
 
-      if (data.image) {
-        result.src = data.image;
-        status.innerText = "Done!";
-      } else {
-        status.innerText = "Error: " + (data.error || "No image returned");
+  <script>
+    async function generate() {
+      const prompt = document.getElementById("prompt").value;
+      const status = document.getElementById("status");
+      const result = document.getElementById("result");
+
+      status.innerText = "Generating...";
+      result.src = "";
+
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt: prompt })
+        });
+
+        const data = await response.json();
+
+        if (data.image) {
+          result.src = data.image;
+          status.innerText = "Done!";
+        } else {
+          status.innerText = "Error: " + (data.error || "No image returned");
+        }
+      } catch (error) {
+        status.innerText = "Error: " + error.message;
       }
-    } catch (error) {
-      status.innerText = "Error: " + error.message;
     }
-  }
-</script>
+  </script>
+</body>
+</html>

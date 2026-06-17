@@ -92,8 +92,8 @@ label {
 <body>
 
 <h1>My Replicate AI Generator</h1>
-<button onclick="document.getElementById('videoTab').scrollIntoView()">🎬 Image to Video</button>
 <button onclick="document.getElementById('imageTab').scrollIntoView()">🖼 Image Generator</button>
+<button onclick="document.getElementById('videoTab').scrollIntoView()">🎬 Image to Video</button>
 <div id="imageTab">
 <label>Main Prompt</label>
 <textarea id="prompt">A cute orange cat sitting on a wooden fence, photorealistic</textarea>
@@ -158,7 +158,7 @@ label {
 </a>
 </div>
 
-<div id="videoTab" style="display:none;">
+<div id="videoTab">
     <h2>🎬 Image to Video</h2>
 <label>Video Provider</label>
 <select id="videoProvider">
@@ -171,7 +171,7 @@ label {
     <label>Video Prompt</label>
     <textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, neon lights, realistic motion"></textarea>
 
-    <button onclick="alert('Generate Video clicked'); generateVideo()">Generate Video</button>
+    <button onclick="generateVideo()">Generate Video</button>
 
     <p id="videoStatus"></p>
 

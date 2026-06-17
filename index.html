@@ -171,8 +171,7 @@ label {
     <label>Video Prompt</label>
     <textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, realistic motion"></textarea>
 
-    <button type="button" onclick="alert('button clicked'); alert(typeof generateVideo); generateVideo();">Generate Video</button>
-
+<button type="button" onclick="generateVideo()">Generate Video</button>
     <p id="videoStatus"></p>
 
     <video id="videoResult" controls style="display:none; max-width:100%; border-radius:12px; margin-top:20px;"></video>
@@ -377,7 +376,7 @@ function showTab(tabName) {
 }
 
 async function generateVideo() {
-   alert("generateVideo started);
+   window.generateVideo = async function() {
     const imageUrl = document.getElementById("videoImageUrl").value;
     const prompt = document.getElementById("videoPrompt").value;
     const provider = document.getElementById("videoProvider").value;

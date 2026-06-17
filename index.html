@@ -161,7 +161,11 @@ label {
 
 <div id="videoTab" style="display:none;">
     <h2>🎬 Image to Video</h2>
-
+<label>Video Provider</label>
+<select id="videoProvider">
+    <option value="fal">Fal.ai</option>
+    <option value="replicate">Replicate</option>
+</select>
     <label>Image URL</label>
     <textarea id="videoImageUrl" placeholder="Paste image URL here"></textarea>
 
@@ -391,6 +395,7 @@ function showTab(tabName) {
 async function generateVideo() {
     const imageUrl = document.getElementById("videoImageUrl").value;
     const prompt = document.getElementById("videoPrompt").value;
+    const provider = document.getElementById("videoProvider").value;
     const status = document.getElementById("videoStatus");
     const video = document.getElementById("videoResult");
 
@@ -408,9 +413,10 @@ async function generateVideo() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                image: imageUrl,
-                prompt: prompt
-            })
+            provider: provider,
+            image: imageUrl,
+            prompt: prompt
+})
         });
 
         const data = await response.json();

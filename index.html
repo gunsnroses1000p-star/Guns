@@ -171,7 +171,7 @@ label {
     <label>Video Prompt</label>
     <textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, neon lights, realistic motion"></textarea>
 
-    <button onclick="generateVideo()">Generate Video</button>
+    <type="button onclick="generateVideo()">Generate Video</button>
 
     <p id="videoStatus"></p>
 
@@ -422,7 +422,7 @@ async function generateVideo() {
     const video = document.getElementById("videoResult");
     const videoDownloadBtn = document.getElementById("videoDownloadBtn");
     if (!imageUrl.trim()) {
-        alert("Paste an image URL first");
+        alert("generateVideo started");
         return;
     }
 

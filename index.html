@@ -225,21 +225,21 @@ async function generate() {
             })
         });
 
-        const data = await response.json();
-        addToHistory(prompt);
-        if (data.image) {
-            result.src = data.image;
-            downloadBtn.href = data.image;
-            downloadBtn.style.display = "inline-block";
-            status.innerText = "Done!";
-            addToGallery(data.image,prompt);
-        } else {
-            status.innerText = "Error: " + (data.error || "No image returned");
-        }
-    } catch (error) {
-        status.innerText = "Error: " + error.message;
-    }
-}
+        <div id="videoTab">
+    <h2>🎬 Image to Video</h2>
+
+    <label>Image URL</label>
+    <textarea id="videoImageUrl" placeholder="Paste image URL here"></textarea>
+
+    <label>Video Prompt</label>
+    <textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, realistic motion"></textarea>
+
+    <button type="button" onclick="generateVideo()">Generate Video</button>
+
+    <p id="videoStatus"></p>
+
+    <video id="videoResult" controls style="display:none; max-width:100%; border-radius:12px; margin-top:20px;"></video>
+</div>
 
 function addToGallery(imageUrl, promptText) {
     galleryImages.unshift({

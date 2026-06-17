@@ -399,8 +399,16 @@ function improvePrompt() {
     promptBox.value = prefix + ", " + prompt + ", " + suffix;
 }
 function showTab(tabName) {
-    document.getElementById("imageTab").style.display = "none";
-    document.getElementById("videoTab").style.display = "none";
+    const imageTab = document.getElementById("imageTab");
+    const videoTab = document.getElementById("videoTab");
+
+    if (!imageTab || !videoTab) {
+        alert("Tab error: imageTab or videoTab missing");
+        return;
+    }
+
+    imageTab.style.display = "none";
+    videoTab.style.display = "none";
 
     document.getElementById(tabName).style.display = "block";
 }

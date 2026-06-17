@@ -176,6 +176,11 @@ label {
     <p id="videoStatus"></p>
 
     <video id="videoResult" controls style="display:none; max-width:100%; border-radius:12px; margin-top:20px;"></video>
+    <br>
+
+<a id="videoDownloadBtn" class="download-btn" style="display:none;" target="_blank">
+    Download Video
+</a>
     </div>
 
 <button onclick="clearHistory()">
@@ -225,37 +230,7 @@ async function generate() {
             })
         });
 
-        <div id="videoTab">
-    <h2>🎬 Image to Video</h2>
-
-    <label>Image URL</label>
-    <textarea id="videoImageUrl" placeholder="Paste image URL here"></textarea>
-
-    <label>Video Prompt</label>
-    <textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, realistic motion"></textarea>
-
-    <button type="button" onclick="generateVideo()">Generate Video</button>
-
-    <p id="videoStatus"></p>
-
-    <video id="videoResult" controls style="display:none; max-width:100%; border-radius:12px; margin-top:20px;"></video>
-</div>
-
-function addToGallery(imageUrl, promptText) {
-    galleryImages.unshift({
-        image: imageUrl,
-        prompt: promptText
-    });
-
-    if (galleryImages.length > 8) {
-        galleryImages.pop();
-    }
-
-    localStorage.setItem("galleryImages", JSON.stringify(galleryImages));
-    loadGallery();
-}
-
-function loadGallery() {
+        
     gallery.innerHTML = "";
 
     galleryImages.forEach(item => {

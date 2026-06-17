@@ -414,12 +414,6 @@ function showTab(tabName) {
     window.scrollTo(0, 0);
 }
 
-    imageTab.style.display = "none";
-    videoTab.style.display = "none";
-
-    document.getElementById(tabName).style.display = "block";
-}
-
 async function generateVideo() {
     const imageUrl = document.getElementById("videoImageUrl").value;
     const prompt = document.getElementById("videoPrompt").value;

@@ -418,6 +418,8 @@ async function generateVideo() {
 
     status.innerText = "Generating video...";
     video.style.display = "none";
+    videoDownloadBtn.style.display = "none";
+    videoDownloadBtn.href = "";
     video.src = "";
 
     try {
@@ -434,15 +436,77 @@ async function generateVideo() {
         const data = await response.json();
 
         if (data.video) {
-            video.src = data.video;
-            video.style.display = "block";
-            status.innerText = "Video ready!";
+    video.src = data.video;
+    video.style.display = "block";
+
+    videoDownloadBtn.href = data.video;
+    videoDownloadBtn.style.display = "inline-block";
+
+    status.innerText = "Video ready!";
+    addToVideoGallery(data.video, imageUrl, prompt);
+        }
         } else {
             status.innerText = "Error: " + (data.error || "No video returned");
         }
     } catch (error) {
         status.innerText = "Error: " + error.message;
     }
+}
+    function addToVideoGallery(videoUrl, imageUrl, promptText) {
+    galleryVideos.unshift({
+        video: videoUrl,
+        image: imageUrl,
+        prompt: promptText
+    });
+
+    if (galleryVideos.length > 8) {
+        galleryVideos.pop();
+    }
+
+    localStorage.setItem("galleryVideos", JSON.stringify(galleryVideos));
+    loadVideoGallery();
+}
+
+function loadVideoGallery() {
+    const videoGallery = document.getElementById("videoGallery");
+
+    if (!videoGallery) return;
+
+    videoGallery.innerHTML = "";
+
+    galleryVideos.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "gallery-item";
+
+        const vid = document.createElement("video");
+        vid.src = item.video;
+        vid.controls = true;
+        vid.style.maxWidth = "100%";
+        vid.style.borderRadius = "12px";
+        vid.style.marginTop = "20px";
+
+        const text = document.createElement("div");
+        text.className = "gallery-prompt";
+        text.textContent = item.prompt || "";
+
+        const link = document.createElement("a");
+        link.href = item.video;
+        link.target = "_blank";
+        link.className = "download-btn";
+        link.textContent = "Download Video";
+
+        div.appendChild(vid);
+        div.appendChild(text);
+        div.appendChild(link);
+
+        videoGallery.appendChild(div);
+    });
+}
+
+function clearVideoGallery() {
+    galleryVideos = [];
+    localStorage.removeItem("galleryVideos");
+    loadVideoGallery();
 }
     loadGallery();
     loadHistory();

@@ -1,5 +1,6 @@
 import json
 import os
+import replicate
 from http.server import BaseHTTPRequestHandler
 
 class handler(BaseHTTPRequestHandler):
@@ -10,17 +11,23 @@ class handler(BaseHTTPRequestHandler):
             data = json.loads(body)
 
             image = data.get("image", "")
-            prompt = data.get("prompt", "")
-            provider = data.get("provider", "replicate")
+            prompt = data.get("prompt", "cinematic motion, smooth camera movement")
+
+            output = replicate.run(
+                "wan-video/wan-2.2-i2v-fast",
+                input={
+                    "image": image,
+                    "prompt": prompt
+                }
+            )
+
+            video_url = output[0] if isinstance(output, list) else output
 
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps({
-                "message": "Video endpoint reached",
-                "provider": provider,
-                "image": image,
-                "prompt": prompt
+                "video": str(video_url)
             }).encode())
 
         except Exception as e:

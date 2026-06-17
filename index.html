@@ -171,7 +171,7 @@ label {
     <label>Video Prompt</label>
     <textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, realistic motion"></textarea>
 
-    <button type="button" onclick="generateVideo()">Generate Video</button>
+    <button type="button" id="generateVideoBtn">Generate Video</button>
 
     <p id="videoStatus"></p>
 
@@ -483,6 +483,7 @@ function clearVideoGallery() {
     localStorage.removeItem("galleryVideos");
     loadVideoGallery();
 }
+    document.getElementById("generateVideoBtn").onclick = generateVideo;
     loadGallery();
     loadHistory();
     loadVideoGallery();

@@ -323,6 +323,7 @@ function clearHistory() {
 }
 function improvePrompt() {
     const promptBox = document.getElementById("prompt");
+    const style = document.getElementById("style").value;
 
     let prompt = promptBox.value.trim();
 
@@ -330,6 +331,37 @@ function improvePrompt() {
         alert("Enter a prompt first");
         return;
     }
+
+    let prefix = "masterpiece, best quality, ultra detailed";
+    let suffix = "sharp focus, realistic lighting, high resolution, professional composition";
+
+    if (style.includes("photorealistic")) {
+        prefix = "photorealistic, ultra detailed, professional photography, natural skin tones";
+        suffix = "realistic shadows, detailed textures, sharp focus, 4k, DSLR quality";
+    }
+
+    if (style.includes("cinematic")) {
+        prefix = "cinematic movie still, dramatic atmosphere, professional film lighting";
+        suffix = "depth of field, volumetric lighting, dramatic shadows, epic composition, 4k";
+    }
+
+    if (style.includes("fantasy")) {
+        prefix = "fantasy art, magical atmosphere, enchanted environment, epic fantasy scene";
+        suffix = "glowing particles, mystical lighting, detailed background, masterpiece quality";
+    }
+
+    if (style.includes("anime")) {
+        prefix = "anime style, vibrant anime colors, highly detailed anime illustration";
+        suffix = "clean line art, expressive character design, beautiful background, sharp details";
+    }
+
+    if (style.includes("cyberpunk")) {
+        prefix = "cyberpunk city, neon lights, futuristic sci-fi atmosphere";
+        suffix = "glowing technology, rain reflections, holograms, cinematic lighting, ultra detailed";
+    }
+
+    promptBox.value = prefix + ", " + prompt + ", " + suffix;
+}
 
     promptBox.value =
         "masterpiece, best quality, ultra detailed, photorealistic, cinematic lighting, " +

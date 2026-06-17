@@ -422,6 +422,7 @@ async function generateVideo() {
     const video = document.getElementById("videoResult");
     const videoDownloadBtn = document.getElementById("videoDownloadBtn");
     if (!imageUrl.trim()) {
+        alert("paste an image URL first");
         return;
     }
 

@@ -414,6 +414,7 @@ function showTab(tabName) {
 }
 
 async function generateVideo("generatevideo started"); {
+   alert("generate Video started);
     const imageUrl = document.getElementById("videoImageUrl").value;
     const prompt = document.getElementById("videoPrompt").value;
     const provider = document.getElementById("videoProvider").value;
@@ -421,7 +422,6 @@ async function generateVideo("generatevideo started"); {
     const video = document.getElementById("videoResult");
     const videoDownloadBtn = document.getElementById("videoDownloadBtn");
     if (!imageUrl.trim()) {
-        alert("generateVideo started");
         return;
     }
 

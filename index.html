@@ -141,6 +141,9 @@ label {
     accept="image/*"
 >
 <br>
+
+<button onclick="improvePrompt()">🤖 Improve Prompt</button>
+
 <button onclick="generate()">Generate</button>
 
 <p id="status"></p>
@@ -318,8 +321,23 @@ function clearHistory() {
 
     loadHistory();
 }
-loadGallery();
-loadHistory();
+function improvePrompt() {
+    const promptBox = document.getElementById("prompt");
+
+    let prompt = promptBox.value.trim();
+
+    if (!prompt) {
+        alert("Enter a prompt first");
+        return;
+    }
+
+    promptBox.value =
+        "masterpiece, best quality, ultra detailed, photorealistic, cinematic lighting, " +
+        prompt +
+        ", highly detailed textures, realistic shadows, professional photography, 4k";
+}
+    loadGallery();
+    loadHistory();
 </script>
 
     

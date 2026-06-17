@@ -92,9 +92,8 @@ label {
 <body>
 
 <h1>My Replicate AI Generator</h1>
-<button onclick="showTab('imageTab')">🖼 Image Generator</button>
-<button onclick="showTab('videoTab')">🎬 Image to Video</button>
-
+<button onclick="document.getElementById('videoTab').scrollIntoView()">🎬 Image to Video</button>
+<button onclick="document.getElementById('imageTab').scrollIntoView()">🖼 Image Generator</button>
 <div id="imageTab">
 <label>Main Prompt</label>
 <textarea id="prompt">A cute orange cat sitting on a wooden fence, photorealistic</textarea>

@@ -92,7 +92,10 @@ label {
 <body>
 
 <h1>My Replicate AI Generator</h1>
+<button onclick="showTab('imageTab')">🖼 Image Generator</button>
+<button onclick="showTab('videoTab')">🎬 Image to Video</button>
 
+<div id="imageTab">
 <label>Main Prompt</label>
 <textarea id="prompt">A cute orange cat sitting on a wooden fence, photorealistic</textarea>
 
@@ -154,7 +157,24 @@ label {
 <a id="downloadBtn" class="download-btn" style="display:none;" target="_blank">
     Open Image
 </a>
-<h2>Prompt History</h2>
+</div>
+
+<div id="videoTab" style="display:none;">
+    <h2>🎬 Image to Video</h2>
+
+    <label>Image URL</label>
+    <textarea id="videoImageUrl" placeholder="Paste image URL here"></textarea>
+
+    <label>Video Prompt</label>
+    <textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, neon lights, realistic motion"></textarea>
+
+    <button onclick="generateVideo()">Generate Video</button>
+
+    <p id="videoStatus"></p>
+
+    <video id="videoResult" controls style="display:none; max-width:100%; border-radius:12px; margin-top:20px;"></video>
+</div>
+    <h2>Prompt History</h2>
 
 <button onclick="clearHistory()">
     Clear History
@@ -361,7 +381,51 @@ function improvePrompt() {
 
     promptBox.value = prefix + ", " + prompt + ", " + suffix;
 }
+function showTab(tabName) {
+    document.getElementById("imageTab").style.display = "none";
+    document.getElementById("videoTab").style.display = "none";
 
+    document.getElementById(tabName).style.display = "block";
+}
+
+async function generateVideo() {
+    const imageUrl = document.getElementById("videoImageUrl").value;
+    const prompt = document.getElementById("videoPrompt").value;
+    const status = document.getElementById("videoStatus");
+    const video = document.getElementById("videoResult");
+
+    if (!imageUrl.trim()) {
+        alert("Paste an image URL first");
+        return;
+    }
+
+    status.innerText = "Generating video...";
+    video.style.display = "none";
+    video.src = "";
+
+    try {
+        const response = await fetch("/api/video", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                image: imageUrl,
+                prompt: prompt
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.video) {
+            video.src = data.video;
+            video.style.display = "block";
+            status.innerText = "Video ready!";
+        } else {
+            status.innerText = "Error: " + (data.error || "No video returned");
+        }
+    } catch (error) {
+        status.innerText = "Error: " + error.message;
+    }
+}
     loadGallery();
     loadHistory();
 </script>

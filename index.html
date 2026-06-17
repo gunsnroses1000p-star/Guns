@@ -162,31 +162,21 @@ label {
     <option value="fal">Fal.ai</option>
     <option value="replicate">Replicate</option>
 </select>
+    <div id="videoTab">
+    <h2>🎬 Image to Video</h2>
+
     <label>Image URL</label>
     <textarea id="videoImageUrl" placeholder="Paste image URL here"></textarea>
 
     <label>Video Prompt</label>
-    <textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, neon lights, realistic motion"></textarea>
+    <textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, realistic motion"></textarea>
 
     <button type="button" onclick="generateVideo()">Generate Video</button>
 
     <p id="videoStatus"></p>
 
     <video id="videoResult" controls style="display:none; max-width:100%; border-radius:12px; margin-top:20px;"></video>
-<br>
-<a id="videoDownloadBtn" class="download-btn" style="display:none;" target="_blank">
-    Download Video
-</a>
-
-<h2>Video Gallery</h2>
-
-<button onclick="clearVideoGallery()">
-    Clear Video Gallery
-</button>
-
-<div id="videoGallery" class="gallery"></div>
-</div>
-    <h2>Prompt History</h2>
+    </div>
 
 <button onclick="clearHistory()">
     Clear History

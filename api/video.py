@@ -3,6 +3,7 @@ import os
 import replicate
 from http.server import BaseHTTPRequestHandler
 
+
 class handler(BaseHTTPRequestHandler):
     def do_POST(self):
         try:
@@ -10,25 +11,60 @@ class handler(BaseHTTPRequestHandler):
             body = self.rfile.read(length)
             data = json.loads(body)
 
-            image = data.get("image", "")
+            provider = data.get("provider", "wan")
+            image = data.get("image", "") or data.get("image_url", "")
             prompt = data.get("prompt", "cinematic motion, smooth camera movement")
             duration = int(data.get("duration", 5))
-            output = replicate.run(
-                "wan-video/wan-2.2-i2v-fast",
-                input={
+
+            if provider == "wan":
+                model = "wan-video/wan-2.2-i2v-fast"
+                input_data = {
                     "image": image,
+                    "prompt": prompt
+                }
+
+            elif provider == "kling":
+                model = "kwaivgi/kling-v2.1"
+                input_data = {
+                    "start_image": image,
                     "prompt": prompt,
                     "duration": duration
                 }
+
+            elif provider == "luma":
+                model = "luma/ray-flash-2-720p"
+                input_data = {
+                    "image": image,
+                    "prompt": prompt
+                }
+
+            elif provider == "pixverse":
+                model = "pixverse/pixverse-v5"
+                input_data = {
+                    "image": image,
+                    "prompt": prompt
+                }
+
+            else:
+                raise Exception("Unknown video provider: " + provider)
+
+            output = replicate.run(
+                model,
+                input=input_data
             )
 
-            video_url = output[0] if isinstance(output, list) else output
+            if isinstance(output, list):
+                video_url = output[0]
+            else:
+                video_url = output
 
             self.send_response(200)
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(json.dumps({
-                "video": str(video_url)
+                "video": str(video_url),
+                "provider": provider,
+                "model": model
             }).encode())
 
         except Exception as e:

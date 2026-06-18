@@ -15,7 +15,17 @@ class handler(BaseHTTPRequestHandler):
             image = data.get("image", "") or data.get("image_url", "")
             prompt = data.get("prompt", "cinematic motion, smooth camera movement")
             duration = int(data.get("duration", 5))
+if provider == "kling" and duration not in [5, 10]:
+    duration = 10
 
+if provider == "wan":
+    duration = 5
+
+if provider == "luma" and duration not in [5, 9]:
+    duration = 9
+
+if provider == "pixverse" and duration not in [5, 8]:
+    duration = 8
             if provider == "wan":
                 model = "wan-video/wan-2.2-i2v-fast"
                 input_data = {

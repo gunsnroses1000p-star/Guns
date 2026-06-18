@@ -376,8 +376,7 @@ function showTab(tabName) {
     window.scrollTo(0, 0);
 }
 
-async function generateVideo() {
-   window.generateVideo = async function() {
+window.generateVideo = async function() {
     const imageUrl = document.getElementById("videoImageUrl").value;
     const prompt = document.getElementById("videoPrompt").value;
     const provider = document.getElementById("videoProvider").value;

@@ -45,6 +45,10 @@ button, a.download-btn {
     display: inline-block;
 }
 
+button:hover {
+    background: #6a1be2;
+}
+
 img {
     max-width: 100%;
     margin-top: 20px;
@@ -55,6 +59,8 @@ label {
     display: block;
     margin-top: 20px;
     font-size: 18px;
+}
+
 #history {
     margin: 20px 0;
 }
@@ -73,6 +79,7 @@ label {
 .history-item:hover {
     opacity: 0.8;
 }
+
 .gallery {
     display: flex;
     flex-wrap: wrap;
@@ -86,13 +93,110 @@ label {
     border-radius: 10px;
     cursor: pointer;
 }
+
+.tab-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: 2px solid #8a2be2;
+    background: transparent;
+    color: #8a2be2;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.tab-btn.active {
+    background: #8a2be2;
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.download-item {
+    background: #222;
+    padding: 15px;
+    margin: 10px auto;
+    max-width: 600px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.download-item img,
+.download-item video {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+
+.download-item-title {
+    color: #8a2be2;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.download-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.download-links a {
+    flex: 1;
+    min-width: 100px;
+    text-align: center;
+    padding: 8px;
+    background: #8a2be2;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.download-links a:hover {
+    background: #6a1be2;
+}
+
+.delete-btn {
+    background: #d9534f !important;
+    padding: 8px 15px !important;
+    margin-left: 5px !important;
+}
+
+.delete-btn:hover {
+    background: #c9423f !important;
+}
 </style>
 </head>
 
 <body>
 
-<h1>My Replicate AI Generator</h1>
-<div id="imageTab">
+<h1>🎨 My Replicate AI Generator</h1>
+
+<!-- Tab Navigation -->
+<div class="tab-buttons">
+    <button class="tab-btn active" onclick="switchTab('imageTab')">🖼️ Image Generate</button>
+    <button class="tab-btn" onclick="switchTab('videoTab')">🎬 Video Generate</button>
+    <button class="tab-btn" onclick="switchTab('downloadTab')">📥 Downloads</button>
+    <button class="tab-btn" onclick="switchTab('historyTab')">📜 History</button>
+</div>
+
+<!-- Image Tab -->
+<div id="imageTab" class="tab-content active">
+<h2>🖼️ Image Generator</h2>
 <label>Main Prompt</label>
 <textarea id="prompt">A cute orange cat sitting on a wooden fence, photorealistic</textarea>
 
@@ -111,98 +215,124 @@ label {
 <label>Style Preset</label>
 <select id="style">
     <option value="">None</option>
-
     <option value="photorealistic, ultra detailed, professional photography, realistic lighting, sharp focus">
         📸 Photorealistic
     </option>
-
     <option value="cinematic lighting, movie still, dramatic atmosphere, epic composition, volumetric lighting">
         🎬 Cinematic
     </option>
-
     <option value="fantasy art, magical environment, epic fantasy, masterpiece, enchanted atmosphere">
         🏰 Fantasy
     </option>
-
     <option value="anime style, manga artwork, vibrant anime colors, highly detailed anime illustration">
         🌸 Anime
     </option>
-
     <option value="cyberpunk city, neon lights, futuristic, sci-fi atmosphere, glowing technology">
         🤖 Cyberpunk
     </option>
 </select>
-<input
-    id="imageInput"
-    placeholder="Image URL for image-to-image (optional)"
-    <input
-    type="file"
-    id="imageFile"
-    accept="image/*"
->
+
+<label>Image URL for image-to-image (optional)</label>
+<input id="imageInput" type="text" placeholder="Paste image URL here">
+
+<label>Upload Image (optional)</label>
+<input type="file" id="imageFile" accept="image/*">
+
 <br>
 <button onclick="improvePrompt()">🤖 Improve Prompt</button>
-
-<button onclick="generate()">Generate</button>
+<button onclick="generate()">Generate Image</button>
 
 <p id="status"></p>
-
 <img id="result" />
 
 <br>
-
 <a id="downloadBtn" class="download-btn" style="display:none;" target="_blank">
     Open Image
 </a>
 </div>
 
-<div id="videoTab">
-    <h2>🎬 Image to Video</h2>
+<!-- Video Tab -->
+<div id="videoTab" class="tab-content">
+<h2>🎬 Image to Video</h2>
+
+<label>Video Provider</label>
 <select id="videoProvider">
     <option value="fal">Fal.ai</option>
     <option value="replicate">Replicate</option>
 </select>
-    
-    <h2>🎬 Image to Video</h2>
 
-    <label>Image URL</label>
-    <textarea id="videoImageUrl" placeholder="Paste image URL here"></textarea>
+<label>Image URL</label>
+<textarea id="videoImageUrl" placeholder="Paste image URL here"></textarea>
 
-    <label>Video Prompt</label>
-    <textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, realistic motion"></textarea>
+<label>Video Prompt</label>
+<textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, realistic motion"></textarea>
 
-<button type="button" onclick="alert('button clicked'); alert(typeof window.generateVideo); window.generateVideo();">Generate Video</button>
-    <p id="videoStatus"></p>
+<button type="button" onclick="window.generateVideo();">Generate Video</button>
+<p id="videoStatus"></p>
 
-    <video id="videoResult" controls style="display:none; max-width:100%; border-radius:12px; margin-top:20px;"></video>
-    <br>
+<video id="videoResult" controls style="display:none; max-width:100%; border-radius:12px; margin-top:20px;"></video>
+<br>
 
 <a id="videoDownloadBtn" class="download-btn" style="display:none;" target="_blank">
     Download Video
 </a>
-    
+</div>
 
-<button onclick="clearHistory()">
-    Clear History
-</button>
+<!-- Downloads Tab -->
+<div id="downloadTab" class="tab-content">
+<h2>📥 Downloaded Media</h2>
 
-<div id="history"></div>
-<h2>Gallery</h2>
-
-<button onclick="clearGallery()">
-    Clear Gallery
-</button>
-
+<h3>🖼️ Generated Images</h3>
+<button onclick="clearGallery()" class="delete-btn">Clear All Images</button>
 <div id="gallery" class="gallery"></div>
+<p id="galleryEmpty" style="color: #999; margin-top: 20px;">No images yet. Generate some!</p>
+
+<h3 style="margin-top: 30px;">🎬 Generated Videos</h3>
+<button onclick="clearVideoGallery()" class="delete-btn">Clear All Videos</button>
+<div id="videoGallery" class="gallery"></div>
+<p id="videoEmpty" style="color: #999; margin-top: 20px;">No videos yet. Create some!</p>
+</div>
+
+<!-- History Tab -->
+<div id="historyTab" class="tab-content">
+<h2>📜 Prompt History</h2>
+<button onclick="clearHistory()" class="delete-btn">Clear History</button>
+<div id="history"></div>
+<p id="historyEmpty" style="color: #999; margin-top: 20px;">No history yet.</p>
+</div>
 
 <script> 
-alert("script started")
-let galleryImages =
-    JSON.parse(localStorage.getItem("galleryImages")) || [];
-let galleryVideos =
-    JSON.parse(localStorage.getItem("galleryVideos")) || [];
-let promptHistory =
-    JSON.parse(localStorage.getItem("promptHistory")) || [];
+let galleryImages = JSON.parse(localStorage.getItem("galleryImages")) || [];
+let galleryVideos = JSON.parse(localStorage.getItem("galleryVideos")) || [];
+let promptHistory = JSON.parse(localStorage.getItem("promptHistory")) || [];
+
+function switchTab(tabName) {
+    // Hide all tabs
+    document.querySelectorAll(".tab-content").forEach(tab => {
+        tab.classList.remove("active");
+    });
+    
+    // Remove active from all buttons
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.classList.remove("active");
+    });
+    
+    // Show selected tab
+    document.getElementById(tabName).classList.add("active");
+    
+    // Add active to clicked button
+    event.target.classList.add("active");
+    
+    window.scrollTo(0, 0);
+    
+    // Refresh display
+    if (tabName === "downloadTab") {
+        loadGallery();
+        loadVideoGallery();
+    } else if (tabName === "historyTab") {
+        loadHistory();
+    }
+}
 
 async function generate() {
     const prompt = document.getElementById("prompt").value;
@@ -226,102 +356,163 @@ async function generate() {
                 prompt: prompt + ", " + style,
                 negative: negative,
                 aspect_ratio: aspect_ratio,
-                image:imageInput
+                image: imageInput
             })
         });
 
-        
+        const data = await response.json();
+
+        if (data.image) {
+            result.src = data.image;
+            downloadBtn.href = data.image;
+            downloadBtn.style.display = "inline-block";
+            status.innerText = "✅ Image generated!";
+            addToHistory(prompt);
+            addToGallery(data.image, prompt);
+        } else {
+            status.innerText = "Error: " + (data.error || "No image returned");
+        }
+    } catch (error) {
+        status.innerText = "Error: " + error.message;
+    }
+}
+
+function addToGallery(image, prompt) {
+    galleryImages.unshift({ image, prompt });
+    if (galleryImages.length > 20) {
+        galleryImages.pop();
+    }
+    localStorage.setItem("galleryImages", JSON.stringify(galleryImages));
+    loadGallery();
+}
+
+function loadGallery() {
+    const gallery = document.getElementById("gallery");
+    const empty = document.getElementById("galleryEmpty");
+    
     gallery.innerHTML = "";
-
-    galleryImages.forEach(item => {
+    
+    if (galleryImages.length === 0) {
+        empty.style.display = "block";
+        return;
+    }
+    
+    empty.style.display = "none";
+    
+    galleryImages.forEach((item, index) => {
         const div = document.createElement("div");
-        div.className = "gallery-item";
-
+        div.className = "download-item";
+        
+        const title = document.createElement("div");
+        title.className = "download-item-title";
+        title.textContent = item.prompt.substring(0, 50) + "...";
+        
         const img = document.createElement("img");
         img.src = item.image;
         img.onclick = () => window.open(item.image, "_blank");
-
-        const text = document.createElement("div");
-        text.className = "gallery-prompt";
-        text.textContent = item.prompt || "";
-
-        div.appendChild(img);
-        div.appendChild(text);
-        gallery.appendChild(div);
-    
         
+        const links = document.createElement("div");
+        links.className = "download-links";
+        
+        const openBtn = document.createElement("a");
+        openBtn.href = item.image;
+        openBtn.target = "_blank";
+        openBtn.textContent = "Open";
+        
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Delete";
+        delBtn.className = "delete-btn";
+        delBtn.onclick = () => deleteImage(index);
+        
+        links.appendChild(openBtn);
+        links.appendChild(delBtn);
+        
+        div.appendChild(title);
+        div.appendChild(img);
+        div.appendChild(links);
+        gallery.appendChild(div);
     });
 }
-function clearGallery() {
-    galleryImages = [];
 
-    localStorage.removeItem("galleryImages");
-
-   loadGallery();
+function deleteImage(index) {
+    galleryImages.splice(index, 1);
+    localStorage.setItem("galleryImages", JSON.stringify(galleryImages));
+    loadGallery();
 }
 
+function clearGallery() {
+    if (confirm("Delete all images?")) {
+        galleryImages = [];
+        localStorage.removeItem("galleryImages");
+        loadGallery();
+    }
+}
 
 function addToHistory(prompt) {
-
     if (!prompt.trim()) return;
-
-    promptHistory = promptHistory.filter(
-        p => p !== prompt
-    );
-
+    promptHistory = promptHistory.filter(p => p !== prompt);
     promptHistory.unshift(prompt);
-
     if (promptHistory.length > 10) {
         promptHistory.pop();
     }
-
-    localStorage.setItem(
-        "promptHistory",
-        JSON.stringify(promptHistory)
-    );
-
+    localStorage.setItem("promptHistory", JSON.stringify(promptHistory));
     loadHistory();
 }
 
 function loadHistory() {
-
-    const history =
-        document.getElementById("history");
-
+    const history = document.getElementById("history");
+    const empty = document.getElementById("historyEmpty");
+    
     history.innerHTML = "";
-
-    promptHistory.forEach(prompt => {
-
-        const div =
-            document.createElement("div");
-
+    
+    if (promptHistory.length === 0) {
+        empty.style.display = "block";
+        return;
+    }
+    
+    empty.style.display = "none";
+    
+    promptHistory.forEach((prompt, index) => {
+        const div = document.createElement("div");
         div.className = "history-item";
-
-        div.textContent = prompt;
-
-        div.onclick = () => {
-            document.getElementById("prompt").value =
-                prompt;
+        
+        const text = document.createElement("span");
+        text.textContent = prompt;
+        text.style.flex = "1";
+        text.onclick = () => {
+            document.getElementById("prompt").value = prompt;
+            switchTab('imageTab');
         };
-
+        
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Delete";
+        delBtn.className = "delete-btn";
+        delBtn.onclick = () => deleteHistory(index);
+        delBtn.style.marginLeft = "10px";
+        
+        div.appendChild(text);
+        div.appendChild(delBtn);
         history.appendChild(div);
     });
 }
 
-function clearHistory() {
-
-    promptHistory = [];
-
-    localStorage.removeItem(
-        "promptHistory"
-    );
-
+function deleteHistory(index) {
+    promptHistory.splice(index, 1);
+    localStorage.setItem("promptHistory", JSON.stringify(promptHistory));
     loadHistory();
 }
+
+function clearHistory() {
+    if (confirm("Clear all history?")) {
+        promptHistory = [];
+        localStorage.removeItem("promptHistory");
+        loadHistory();
+    }
+}
+
 function improvePrompt() {
     const promptBox = document.getElementById("prompt");
     const style = document.getElementById("style").value;
-
     let prompt = promptBox.value.trim();
 
     if (!prompt) {
@@ -359,22 +550,6 @@ function improvePrompt() {
 
     promptBox.value = prefix + ", " + prompt + ", " + suffix;
 }
-function showTab(tabName) {
-    document.querySelectorAll("#imageTab, #videoTab").forEach(tab => {
-        tab.style.display = "none";
-    });
-
-    const selectedTab = document.getElementById(tabName);
-
-    if (!selectedTab) {
-        alert("Tab not found: " + tabName);
-        return;
-    }
-
-    selectedTab.style.display = "block";
-
-    window.scrollTo(0, 0);
-}
 
 window.generateVideo = async function() {
     const imageUrl = document.getElementById("videoImageUrl").value;
@@ -383,13 +558,12 @@ window.generateVideo = async function() {
     const status = document.getElementById("videoStatus");
     const video = document.getElementById("videoResult");
     const videoDownloadBtn = document.getElementById("videoDownloadBtn");
-   alert("passed setup");
+
     if (!imageUrl.trim()) {
-        alert("paste an image URL first");
+        alert("Paste an image URL first");
         return;
     }
 
-    alert("Reached fetch");
     status.innerText = "Generating video...";
     video.style.display = "none";
     videoDownloadBtn.style.display = "none";
@@ -401,24 +575,21 @@ window.generateVideo = async function() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-            provider: provider,
-            image: imageUrl,
-            prompt: prompt
-})
+                provider: provider,
+                image: imageUrl,
+                prompt: prompt
+            })
         });
 
         const data = await response.json();
 
         if (data.video) {
-    video.src = data.video;
-    video.style.display = "block";
-
-    videoDownloadBtn.href = data.video;
-    videoDownloadBtn.style.display = "inline-block";
-
-    status.innerText = "Video ready!";
-    addToVideoGallery(data.video, imageUrl, prompt);
-        }
+            video.src = data.video;
+            video.style.display = "block";
+            videoDownloadBtn.href = data.video;
+            videoDownloadBtn.style.display = "inline-block";
+            status.innerText = "✅ Video ready!";
+            addToVideoGallery(data.video, imageUrl, prompt);
         } else {
             status.innerText = "Error: " + (data.error || "No video returned");
         }
@@ -426,7 +597,8 @@ window.generateVideo = async function() {
         status.innerText = "Error: " + error.message;
     }
 }
-    function addToVideoGallery(videoUrl, imageUrl, promptText) {
+
+function addToVideoGallery(videoUrl, imageUrl, promptText) {
     galleryVideos.unshift({
         video: videoUrl,
         image: imageUrl,
@@ -443,53 +615,74 @@ window.generateVideo = async function() {
 
 function loadVideoGallery() {
     const videoGallery = document.getElementById("videoGallery");
-
-    if (!videoGallery) return;
-
+    const empty = document.getElementById("videoEmpty");
+    
     videoGallery.innerHTML = "";
+    
+    if (galleryVideos.length === 0) {
+        empty.style.display = "block";
+        return;
+    }
+    
+    empty.style.display = "none";
 
-    galleryVideos.forEach(item => {
+    galleryVideos.forEach((item, index) => {
         const div = document.createElement("div");
-        div.className = "gallery-item";
+        div.className = "download-item";
+
+        const title = document.createElement("div");
+        title.className = "download-item-title";
+        title.textContent = item.prompt.substring(0, 50) + "...";
 
         const vid = document.createElement("video");
         vid.src = item.video;
         vid.controls = true;
         vid.style.maxWidth = "100%";
         vid.style.borderRadius = "12px";
-        vid.style.marginTop = "20px";
+        vid.style.marginTop = "10px";
 
-        const text = document.createElement("div");
-        text.className = "gallery-prompt";
-        text.textContent = item.prompt || "";
+        const links = document.createElement("div");
+        links.className = "download-links";
 
-        const link = document.createElement("a");
-        link.href = item.video;
-        link.target = "_blank";
-        link.className = "download-btn";
-        link.textContent = "Download Video";
+        const openBtn = document.createElement("a");
+        openBtn.href = item.video;
+        openBtn.target = "_blank";
+        openBtn.textContent = "Download";
 
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Delete";
+        delBtn.className = "delete-btn";
+        delBtn.onclick = () => deleteVideo(index);
+
+        links.appendChild(openBtn);
+        links.appendChild(delBtn);
+
+        div.appendChild(title);
         div.appendChild(vid);
-        div.appendChild(text);
-        div.appendChild(link);
-
+        div.appendChild(links);
         videoGallery.appendChild(div);
     });
 }
 
-function clearVideoGallery() {
-    galleryVideos = [];
-    localStorage.removeItem("galleryVideos");
+function deleteVideo(index) {
+    galleryVideos.splice(index, 1);
+    localStorage.setItem("galleryVideos", JSON.stringify(galleryVideos));
     loadVideoGallery();
 }
-    alert("Bottom of script reached");
-    document.getElementById("generateVideoBtn").onclick = generateVideo;
-    loadGallery();
-    loadHistory();
-    loadVideoGallery();
-</script>
 
-    
+function clearVideoGallery() {
+    if (confirm("Delete all videos?")) {
+        galleryVideos = [];
+        localStorage.removeItem("galleryVideos");
+        loadVideoGallery();
+    }
+}
+
+// Initialize
+loadGallery();
+loadHistory();
+loadVideoGallery();
+</script>
 
 </body>
 </html>

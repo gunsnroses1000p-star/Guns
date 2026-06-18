@@ -12,12 +12,13 @@ class handler(BaseHTTPRequestHandler):
 
             image = data.get("image", "")
             prompt = data.get("prompt", "cinematic motion, smooth camera movement")
-
+            duration = int(data.get("duration", 5))
             output = replicate.run(
                 "wan-video/wan-2.2-i2v-fast",
                 input={
                     "image": image,
-                    "prompt": prompt
+                    "prompt": prompt,
+                    "duration": duration
                 }
             )
 

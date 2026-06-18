@@ -922,7 +922,19 @@ function clearVideoGallery() {
         loadVideoGallery();
     }
 }
+function uploadVideoImage(event) {
+    const file = event.target.files[0];
+    if (!file) return;
 
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        document.getElementById("videoImageUrl").value =
+            e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+}
 // Initialize
 loadGallery();
 loadHistory();

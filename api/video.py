@@ -25,12 +25,13 @@ if provider == "luma" and duration not in [5, 9]:
     duration = 9
 
 if provider == "pixverse" and duration not in [5, 8]:
-    duration = 8
-            if provider == "wan":
-                model = "wan-video/wan-2.2-i2v-fast"
-                input_data = {
-                    "image": image,
-                    "prompt": prompt
+    duration = 8 
+
+if provider == "wan":
+   model = "wan-video/wan-2.2-i2v-fast"
+   input_data = {
+     "image": image,
+     "prompt": prompt
                     
                 }
 

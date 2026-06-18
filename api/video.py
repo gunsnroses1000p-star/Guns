@@ -21,7 +21,7 @@ class handler(BaseHTTPRequestHandler):
                 input_data = {
                     "image": image,
                     "prompt": prompt
-                    "duration": duration,
+                    
                 }
 
             elif provider == "kling":
@@ -37,7 +37,7 @@ class handler(BaseHTTPRequestHandler):
                 input_data = {
                     "image": image,
                     "prompt": prompt
-                    "duration": duration,
+                    
                 }
 
             elif provider == "pixverse":
@@ -45,7 +45,7 @@ class handler(BaseHTTPRequestHandler):
                 input_data = {
                     "image": image,
                     "prompt": prompt
-                    "duration": duration,
+                    
                 }
 
             else:

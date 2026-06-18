@@ -18,7 +18,7 @@ h1, h2 {
     color: #8a2be2;
 }
 
-textarea, select {
+textarea, select, input[type="text"] {
     width: 90%;
     max-width: 600px;
     padding: 10px;
@@ -179,6 +179,52 @@ label {
 .delete-btn:hover {
     background: #c9423f !important;
 }
+
+.image-preview {
+    width: 150px;
+    height: 150px;
+    border: 2px dashed #8a2be2;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto;
+    cursor: pointer;
+    background: #1a1a1a;
+    overflow: hidden;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+    margin: 0;
+}
+
+.image-preview span {
+    text-align: center;
+    color: #8a2be2;
+    font-size: 12px;
+}
+
+.stitch-options {
+    background: #1a1a1a;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stitch-options label {
+    margin-top: 10px;
+}
+
+.hidden-file-input {
+    display: none;
+}
 </style>
 </head>
 
@@ -189,6 +235,7 @@ label {
 <!-- Tab Navigation -->
 <div class="tab-buttons">
     <button class="tab-btn active" onclick="switchTab('imageTab')">🖼️ Image Generate</button>
+    <button class="tab-btn" onclick="switchTab('stitchTab')">🔗 Image Stitch</button>
     <button class="tab-btn" onclick="switchTab('videoTab')">🎬 Video Generate</button>
     <button class="tab-btn" onclick="switchTab('downloadTab')">📥 Downloads</button>
     <button class="tab-btn" onclick="switchTab('historyTab')">📜 History</button>
@@ -251,6 +298,47 @@ label {
 </a>
 </div>
 
+<!-- Image Stitch Tab -->
+<div id="stitchTab" class="tab-content">
+<h2>🔗 Seamless Image Stitch</h2>
+<p style="color: #999; margin-bottom: 20px;">Combine two images into one seamless panorama or merged image</p>
+
+<div class="stitch-options">
+    <label>📸 First Image - Click to Upload</label>
+    <input type="file" id="stitchImage1File" accept="image/*" class="hidden-file-input">
+    <div class="image-preview" onclick="document.getElementById('stitchImage1File').click();">
+        <img id="stitchImage1Preview" style="display:none;">
+        <span id="stitchImage1Text">Click to upload image 1</span>
+    </div>
+
+    <label>📸 Second Image - Click to Upload</label>
+    <input type="file" id="stitchImage2File" accept="image/*" class="hidden-file-input">
+    <div class="image-preview" onclick="document.getElementById('stitchImage2File').click();">
+        <img id="stitchImage2Preview" style="display:none;">
+        <span id="stitchImage2Text">Click to upload image 2</span>
+    </div>
+
+    <label>Stitch Direction</label>
+    <select id="stitchDirection">
+        <option value="horizontal">→ Horizontal (left to right)</option>
+        <option value="vertical">↓ Vertical (top to bottom)</option>
+    </select>
+
+    <label>Blend Description (optional)</label>
+    <textarea id="stitchPrompt" placeholder="Example: seamless transition, perfect blend, smooth gradient"></textarea>
+</div>
+
+<button onclick="stitchImages()" style="margin-top: 20px;">🔗 Create Seamless Image</button>
+<p id="stitchStatus"></p>
+
+<img id="stitchResult" style="display:none; max-width:100%; margin-top:20px; border-radius:12px;"/>
+
+<br>
+<a id="stitchDownloadBtn" class="download-btn" style="display:none;" target="_blank">
+    Download Stitched Image
+</a>
+</div>
+
 <!-- Video Tab -->
 <div id="videoTab" class="tab-content">
 <h2>🎬 Image to Video</h2>
@@ -291,6 +379,11 @@ label {
 <button onclick="clearVideoGallery()" class="delete-btn">Clear All Videos</button>
 <div id="videoGallery" class="gallery"></div>
 <p id="videoEmpty" style="color: #999; margin-top: 20px;">No videos yet. Create some!</p>
+
+<h3 style="margin-top: 30px;">🔗 Stitched Images</h3>
+<button onclick="clearStitchGallery()" class="delete-btn">Clear All Stitched</button>
+<div id="stitchGallery" class="gallery"></div>
+<p id="stitchEmpty" style="color: #999; margin-top: 20px;">No stitched images yet.</p>
 </div>
 
 <!-- History Tab -->
@@ -304,31 +397,60 @@ label {
 <script> 
 let galleryImages = JSON.parse(localStorage.getItem("galleryImages")) || [];
 let galleryVideos = JSON.parse(localStorage.getItem("galleryVideos")) || [];
+let galleryStitched = JSON.parse(localStorage.getItem("galleryStitched")) || [];
 let promptHistory = JSON.parse(localStorage.getItem("promptHistory")) || [];
 
+let stitchImage1Data = null;
+let stitchImage2Data = null;
+
+// File upload handlers for stitch - Image 1
+document.getElementById('stitchImage1File').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            stitchImage1Data = event.target.result;
+            document.getElementById('stitchImage1Preview').src = event.target.result;
+            document.getElementById('stitchImage1Preview').style.display = 'block';
+            document.getElementById('stitchImage1Text').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// File upload handlers for stitch - Image 2
+document.getElementById('stitchImage2File').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            stitchImage2Data = event.target.result;
+            document.getElementById('stitchImage2Preview').src = event.target.result;
+            document.getElementById('stitchImage2Preview').style.display = 'block';
+            document.getElementById('stitchImage2Text').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
 function switchTab(tabName) {
-    // Hide all tabs
     document.querySelectorAll(".tab-content").forEach(tab => {
         tab.classList.remove("active");
     });
     
-    // Remove active from all buttons
     document.querySelectorAll(".tab-btn").forEach(btn => {
         btn.classList.remove("active");
     });
     
-    // Show selected tab
     document.getElementById(tabName).classList.add("active");
-    
-    // Add active to clicked button
     event.target.classList.add("active");
     
     window.scrollTo(0, 0);
     
-    // Refresh display
     if (tabName === "downloadTab") {
         loadGallery();
         loadVideoGallery();
+        loadStitchGallery();
     } else if (tabName === "historyTab") {
         loadHistory();
     }
@@ -371,6 +493,51 @@ async function generate() {
             addToGallery(data.image, prompt);
         } else {
             status.innerText = "Error: " + (data.error || "No image returned");
+        }
+    } catch (error) {
+        status.innerText = "Error: " + error.message;
+    }
+}
+
+async function stitchImages() {
+    if (!stitchImage1Data || !stitchImage2Data) {
+        alert("Please upload both images first");
+        return;
+    }
+
+    const direction = document.getElementById("stitchDirection").value;
+    const prompt = document.getElementById("stitchPrompt").value;
+    const status = document.getElementById("stitchStatus");
+    const result = document.getElementById("stitchResult");
+    const downloadBtn = document.getElementById("stitchDownloadBtn");
+
+    status.innerText = "Creating seamless image...";
+    result.style.display = "none";
+    downloadBtn.style.display = "none";
+
+    try {
+        const response = await fetch("/api/stitch", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                image1: stitchImage1Data,
+                image2: stitchImage2Data,
+                direction: direction,
+                prompt: prompt || "seamless blend, perfect transition"
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.image) {
+            result.src = data.image;
+            result.style.display = "block";
+            downloadBtn.href = data.image;
+            downloadBtn.style.display = "inline-block";
+            status.innerText = "✅ Seamless image created!";
+            addToStitchGallery(data.image, direction, prompt);
+        } else {
+            status.innerText = "Error: " + (data.error || "Failed to stitch images");
         }
     } catch (error) {
         status.innerText = "Error: " + error.message;
@@ -445,6 +612,78 @@ function clearGallery() {
         galleryImages = [];
         localStorage.removeItem("galleryImages");
         loadGallery();
+    }
+}
+
+function addToStitchGallery(image, direction, prompt) {
+    galleryStitched.unshift({ image, direction, prompt });
+    if (galleryStitched.length > 20) {
+        galleryStitched.pop();
+    }
+    localStorage.setItem("galleryStitched", JSON.stringify(galleryStitched));
+    loadStitchGallery();
+}
+
+function loadStitchGallery() {
+    const gallery = document.getElementById("stitchGallery");
+    const empty = document.getElementById("stitchEmpty");
+    
+    gallery.innerHTML = "";
+    
+    if (galleryStitched.length === 0) {
+        empty.style.display = "block";
+        return;
+    }
+    
+    empty.style.display = "none";
+    
+    galleryStitched.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.className = "download-item";
+        
+        const title = document.createElement("div");
+        title.className = "download-item-title";
+        const direction = item.direction === "horizontal" ? "→ Horizontal" : "↓ Vertical";
+        title.textContent = direction + " - " + (item.prompt ? item.prompt.substring(0, 30) : "Stitched");
+        
+        const img = document.createElement("img");
+        img.src = item.image;
+        img.onclick = () => window.open(item.image, "_blank");
+        
+        const links = document.createElement("div");
+        links.className = "download-links";
+        
+        const openBtn = document.createElement("a");
+        openBtn.href = item.image;
+        openBtn.target = "_blank";
+        openBtn.textContent = "Open";
+        
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Delete";
+        delBtn.className = "delete-btn";
+        delBtn.onclick = () => deleteStitched(index);
+        
+        links.appendChild(openBtn);
+        links.appendChild(delBtn);
+        
+        div.appendChild(title);
+        div.appendChild(img);
+        div.appendChild(links);
+        gallery.appendChild(div);
+    });
+}
+
+function deleteStitched(index) {
+    galleryStitched.splice(index, 1);
+    localStorage.setItem("galleryStitched", JSON.stringify(galleryStitched));
+    loadStitchGallery();
+}
+
+function clearStitchGallery() {
+    if (confirm("Delete all stitched images?")) {
+        galleryStitched = [];
+        localStorage.removeItem("galleryStitched");
+        loadStitchGallery();
     }
 }
 
@@ -682,6 +921,7 @@ function clearVideoGallery() {
 loadGallery();
 loadHistory();
 loadVideoGallery();
+loadStitchGallery();
 </script>
 
 </body>

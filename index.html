@@ -804,6 +804,7 @@ window.generateVideo = async function() {
     const imageUrl = document.getElementById("videoImageUrl").value;
     const prompt = document.getElementById("videoPrompt").value;
     const provider = document.getElementById("videoProvider").value;
+    const duration = document.getElementById("videoDuration").value;
     const status = document.getElementById("videoStatus");
     const video = document.getElementById("videoResult");
     const videoDownloadBtn = document.getElementById("videoDownloadBtn");
@@ -827,6 +828,7 @@ window.generateVideo = async function() {
                 provider: provider,
                 image: imageUrl,
                 prompt: prompt
+                duration: duration
             })
         });
 

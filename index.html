@@ -354,7 +354,12 @@ label {
 
 <label>Video Prompt</label>
 <textarea id="videoPrompt" placeholder="Example: slow cinematic camera push-in, realistic motion"></textarea>
-
+<label>Video Duration</label>
+<select id="videoDuration">
+    <option value="5">5 Seconds</option>
+    <option value="10">10 Seconds</option>
+    <option value="15">15 Seconds</option>
+</select>
 <button type="button" onclick="window.generateVideo();">Generate Video</button>
 <p id="videoStatus"></p>
 

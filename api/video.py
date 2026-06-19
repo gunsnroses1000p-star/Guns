@@ -15,24 +15,24 @@ class handler(BaseHTTPRequestHandler):
             image = data.get("image", "") or data.get("image_url", "")
             prompt = data.get("prompt", "cinematic motion, smooth camera movement")
             duration = int(data.get("duration", 5))
-if provider == "kling" and duration not in [5, 10]:
-    duration = 10
 
-if provider == "wan":
-    duration = 5
+            if provider == "kling" and duration not in [5, 10]:
+                duration = 10
 
-if provider == "luma" and duration not in [5, 9]:
-    duration = 9
+            if provider == "wan":
+                duration = 5
 
-if provider == "pixverse" and duration not in [5, 8]:
-    duration = 8 
+            if provider == "luma" and duration not in [5, 9]:
+                duration = 9
 
-if provider == "wan":
-   model = "wan-video/wan-2.2-i2v-fast"
-   input_data = {
-     "image": image,
-     "prompt": prompt
-                    
+            if provider == "pixverse" and duration not in [5, 8]:
+                duration = 8
+
+            if provider == "wan":
+                model = "wan-video/wan-2.2-i2v-fast"
+                input_data = {
+                    "image": image,
+                    "prompt": prompt
                 }
 
             elif provider == "kling":
@@ -48,7 +48,6 @@ if provider == "wan":
                 input_data = {
                     "image": image,
                     "prompt": prompt
-                    
                 }
 
             elif provider == "pixverse":
@@ -56,7 +55,21 @@ if provider == "wan":
                 input_data = {
                     "image": image,
                     "prompt": prompt
-                    
+                }
+
+            elif provider == "fal":
+                model = "fal-ai/wan-i2v"
+                input_data = {
+                    "image_url": image,
+                    "prompt": prompt
+                }
+
+            elif provider == "replicate":
+                model = "stability-ai/stable-video-diffusion"
+                input_data = {
+                    "input_image": image,
+                    "motion_bucket_id": 127,
+                    "cond_aug": 0.02
                 }
 
             else:

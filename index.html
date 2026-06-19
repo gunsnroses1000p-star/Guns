@@ -180,6 +180,132 @@ label {
     background: #c9423f !important;
 }
 
+/* Enhanced upload preview styles */
+.upload-preview-container {
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.upload-preview {
+    width: 100%;
+    height: 250px;
+    border: 3px dashed #8a2be2;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: #1a1a1a;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.upload-preview:hover {
+    border-color: #a040ff;
+    background: #222;
+}
+
+.upload-preview.drag-over {
+    border-color: #a040ff;
+    background: #2a1a3a;
+    transform: scale(1.02);
+}
+
+.upload-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 9px;
+    margin: 0;
+}
+
+.upload-preview-placeholder {
+    text-align: center;
+    color: #8a2be2;
+}
+
+.upload-preview-placeholder span {
+    display: block;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.upload-preview-placeholder .icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.upload-preview-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 10px;
+    color: #8a2be2;
+    font-size: 12px;
+    max-height: 60px;
+    overflow: hidden;
+}
+
+.upload-preview-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.upload-preview-actions button {
+    padding: 8px 16px;
+    font-size: 14px;
+    margin: 0;
+}
+
+.remove-btn {
+    background: #d9534f !important;
+}
+
+.remove-btn:hover {
+    background: #c9423f !important;
+}
+
+.replace-btn {
+    background: #5cb85c !important;
+}
+
+.replace-btn:hover {
+    background: #4cae4c !important;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 4px;
+    background: #333;
+    border-radius: 2px;
+    margin-top: 10px;
+    overflow: hidden;
+    display: none;
+}
+
+.progress-bar-container.active {
+    display: block;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #8a2be2, #a040ff);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 2px;
+}
+
+.upload-hint {
+    font-size: 12px;
+    color: #999;
+    margin-top: 8px;
+}
+
 .image-preview {
     width: 150px;
     height: 150px;
@@ -283,7 +409,26 @@ label {
 <input id="imageInput" type="text" placeholder="Paste image URL here">
 
 <label>Upload Image (optional)</label>
-<input type="file" id="imageFile" accept="image/*">
+<div class="upload-preview-container">
+    <div class="upload-preview" id="imageUploadPreview" onclick="document.getElementById('imageFile').click();">
+        <div class="upload-preview-placeholder" id="imageUploadPlaceholder">
+            <div class="icon">📤</div>
+            <span>Click to upload or drag & drop</span>
+            <span style="font-size: 11px; color: #666;">PNG, JPG up to 50MB</span>
+            <span style="font-size: 11px; color: #666;">Or press Ctrl+V to paste</span>
+        </div>
+        <div class="upload-preview-info" id="imageUploadInfo" style="display:none;"></div>
+    </div>
+    <div class="progress-bar-container" id="imageProgressContainer">
+        <div class="progress-bar" id="imageProgressBar"></div>
+    </div>
+    <div class="upload-preview-actions" id="imageUploadActions" style="display:none;">
+        <button class="remove-btn" onclick="removeImageUpload()">❌ Remove</button>
+        <button class="replace-btn" onclick="document.getElementById('imageFile').click();">🔄 Replace</button>
+    </div>
+</div>
+
+<input type="file" id="imageFile" accept="image/*" class="hidden-file-input">
 
 <br>
 <button onclick="improvePrompt()">🤖 Improve Prompt</button>
@@ -304,19 +449,41 @@ label {
 <p style="color: #999; margin-bottom: 20px;">Combine two images into one seamless panorama or merged image</p>
 
 <div class="stitch-options">
-    <label>📸 First Image - Click to Upload</label>
+    <label>📸 First Image - Click to Upload or Drag & Drop</label>
+    <div class="upload-preview" id="stitch1UploadPreview" onclick="document.getElementById('stitchImage1File').click();">
+        <div class="upload-preview-placeholder" id="stitch1UploadPlaceholder">
+            <div class="icon">📤</div>
+            <span>Click to upload or drag & drop</span>
+            <span style="font-size: 11px; color: #666;">PNG, JPG (First image)</span>
+        </div>
+        <div class="upload-preview-info" id="stitch1UploadInfo" style="display:none;"></div>
+    </div>
+    <div class="progress-bar-container" id="stitch1ProgressContainer">
+        <div class="progress-bar" id="stitch1ProgressBar"></div>
+    </div>
+    <div class="upload-preview-actions" id="stitch1UploadActions" style="display:none;">
+        <button class="remove-btn" onclick="removeStitchImage(1)">❌ Remove</button>
+        <button class="replace-btn" onclick="document.getElementById('stitchImage1File').click();">🔄 Replace</button>
+    </div>
     <input type="file" id="stitchImage1File" accept="image/*" class="hidden-file-input">
-    <div class="image-preview" onclick="document.getElementById('stitchImage1File').click();">
-        <img id="stitchImage1Preview" style="display:none;">
-        <span id="stitchImage1Text">Click to upload image 1</span>
-    </div>
 
-    <label>📸 Second Image - Click to Upload</label>
-    <input type="file" id="stitchImage2File" accept="image/*" class="hidden-file-input">
-    <div class="image-preview" onclick="document.getElementById('stitchImage2File').click();">
-        <img id="stitchImage2Preview" style="display:none;">
-        <span id="stitchImage2Text">Click to upload image 2</span>
+    <label style="margin-top: 30px;">📸 Second Image - Click to Upload or Drag & Drop</label>
+    <div class="upload-preview" id="stitch2UploadPreview" onclick="document.getElementById('stitchImage2File').click();">
+        <div class="upload-preview-placeholder" id="stitch2UploadPlaceholder">
+            <div class="icon">📤</div>
+            <span>Click to upload or drag & drop</span>
+            <span style="font-size: 11px; color: #666;">PNG, JPG (Second image)</span>
+        </div>
+        <div class="upload-preview-info" id="stitch2UploadInfo" style="display:none;"></div>
     </div>
+    <div class="progress-bar-container" id="stitch2ProgressContainer">
+        <div class="progress-bar" id="stitch2ProgressBar"></div>
+    </div>
+    <div class="upload-preview-actions" id="stitch2UploadActions" style="display:none;">
+        <button class="remove-btn" onclick="removeStitchImage(2)">❌ Remove</button>
+        <button class="replace-btn" onclick="document.getElementById('stitchImage2File').click();">🔄 Replace</button>
+    </div>
+    <input type="file" id="stitchImage2File" accept="image/*" class="hidden-file-input">
 
     <label>Stitch Direction</label>
     <select id="stitchDirection">
@@ -352,8 +519,27 @@ label {
     <option value="fal">Fal.ai</option>
     <option value="replicate">Replicate</option>
 </select>
+
 <label>Upload Image</label>
-<input type="file" id="videoImageFile" accept="image/*" onchange="uploadVideoImage(event)">
+<div class="upload-preview-container">
+    <div class="upload-preview" id="videoUploadPreview" onclick="document.getElementById('videoImageFile').click();">
+        <div class="upload-preview-placeholder" id="videoUploadPlaceholder">
+            <div class="icon">📤</div>
+            <span>Click to upload or drag & drop</span>
+            <span style="font-size: 11px; color: #666;">PNG, JPG up to 50MB</span>
+        </div>
+        <div class="upload-preview-info" id="videoUploadInfo" style="display:none;"></div>
+    </div>
+    <div class="progress-bar-container" id="videoProgressContainer">
+        <div class="progress-bar" id="videoProgressBar"></div>
+    </div>
+    <div class="upload-preview-actions" id="videoUploadActions" style="display:none;">
+        <button class="remove-btn" onclick="removeVideoUpload()">❌ Remove</button>
+        <button class="replace-btn" onclick="document.getElementById('videoImageFile').click();">🔄 Replace</button>
+    </div>
+</div>
+<input type="file" id="videoImageFile" accept="image/*" class="hidden-file-input">
+
 <label>Image URL</label>
 <textarea id="videoImageUrl" placeholder="Paste image URL here"></textarea>
 
@@ -414,35 +600,200 @@ let promptHistory = JSON.parse(localStorage.getItem("promptHistory")) || [];
 let stitchImage1Data = null;
 let stitchImage2Data = null;
 
-// File upload handlers for stitch - Image 1
-document.getElementById('stitchImage1File').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            stitchImage1Data = event.target.result;
-            document.getElementById('stitchImage1Preview').src = event.target.result;
-            document.getElementById('stitchImage1Preview').style.display = 'block';
-            document.getElementById('stitchImage1Text').style.display = 'none';
-        };
-        reader.readAsDataURL(file);
-    }
-});
+// ============ ENHANCED UPLOAD HANDLERS ============
 
-// File upload handlers for stitch - Image 2
-document.getElementById('stitchImage2File').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
+function setupDragDrop(inputId, previewId, placeholderId, infoId, progressContainerId, progressBarId, actionsId, onUpload) {
+    const fileInput = document.getElementById(inputId);
+    const preview = document.getElementById(previewId);
+    const placeholder = document.getElementById(placeholderId);
+    const info = document.getElementById(infoId);
+    const progressContainer = document.getElementById(progressContainerId);
+    const progressBar = document.getElementById(progressBarId);
+    const actions = document.getElementById(actionsId);
+
+    // Drag over
+    preview.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        preview.classList.add("drag-over");
+    });
+
+    preview.addEventListener("dragleave", () => {
+        preview.classList.remove("drag-over");
+    });
+
+    // Drop
+    preview.addEventListener("drop", (e) => {
+        e.preventDefault();
+        preview.classList.remove("drag-over");
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            handleFileUpload(fileInput, progressContainer, progressBar, onUpload);
+        }
+    });
+
+    // File input change
+    fileInput.addEventListener("change", (e) => {
+        handleFileUpload(fileInput, progressContainer, progressBar, onUpload);
+    });
+
+    // Keyboard paste
+    document.addEventListener("paste", (e) => {
+        if (document.activeElement.id !== inputId && !inputId.includes("imageFile")) {
+            return;
+        }
+        const items = e.clipboardData.items;
+        for (let item of items) {
+            if (item.kind === "file" && item.type.startsWith("image/")) {
+                const file = item.getAsFile();
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                fileInput.files = dataTransfer.files;
+                handleFileUpload(fileInput, progressContainer, progressBar, onUpload);
+                e.preventDefault();
+                break;
+            }
+        }
+    });
+
+    function handleFileUpload(input, progressContainer, progressBar, callback) {
+        const file = input.files[0];
+        if (!file) return;
+
+        progressContainer.classList.add("active");
+        progressBar.style.width = "0%";
+
         const reader = new FileReader();
-        reader.onload = function(event) {
-            stitchImage2Data = event.target.result;
-            document.getElementById('stitchImage2Preview').src = event.target.result;
-            document.getElementById('stitchImage2Preview').style.display = 'block';
-            document.getElementById('stitchImage2Text').style.display = 'none';
+
+        // Simulate progress
+        let progress = 0;
+        const progressInterval = setInterval(() => {
+            if (progress < 90) {
+                progress += Math.random() * 30;
+                progressBar.style.width = Math.min(progress, 90) + "%";
+            }
+        }, 100);
+
+        reader.onload = function(e) {
+            clearInterval(progressInterval);
+            progressBar.style.width = "100%";
+            
+            setTimeout(() => {
+                progressContainer.classList.remove("active");
+                callback(e.target.result, file);
+            }, 300);
         };
+
+        reader.onerror = function() {
+            clearInterval(progressInterval);
+            progressContainer.classList.remove("active");
+            alert("Error reading file");
+        };
+
         reader.readAsDataURL(file);
     }
-});
+}
+
+// Image upload (Image Generate tab)
+setupDragDrop("imageFile", "imageUploadPreview", "imageUploadPlaceholder", "imageUploadInfo", 
+    "imageProgressContainer", "imageProgressBar", "imageUploadActions",
+    function(dataUrl, file) {
+        document.getElementById("imageInput").value = dataUrl;
+        document.getElementById("imageUploadPlaceholder").style.display = "none";
+        document.getElementById("imageUploadInfo").style.display = "block";
+        document.getElementById("imageUploadInfo").innerHTML = `
+            📁 ${file.name}<br>
+            ${(file.size / 1024 / 1024).toFixed(2)} MB
+        `;
+        document.getElementById("imageUploadActions").style.display = "flex";
+        
+        // Show preview
+        const preview = document.getElementById("imageUploadPreview");
+        preview.innerHTML = `<img src="${dataUrl}" style="position:absolute; width:100%; height:100%; object-fit:cover;"><div class="upload-preview-info">📁 ${file.name}<br>${(file.size / 1024 / 1024).toFixed(2)} MB</div>`;
+    }
+);
+
+function removeImageUpload() {
+    document.getElementById("imageFile").value = "";
+    document.getElementById("imageInput").value = "";
+    document.getElementById("imageUploadPreview").innerHTML = `
+        <div class="upload-preview-placeholder">
+            <div class="icon">📤</div>
+            <span>Click to upload or drag & drop</span>
+            <span style="font-size: 11px; color: #666;">PNG, JPG up to 50MB</span>
+            <span style="font-size: 11px; color: #666;">Or press Ctrl+V to paste</span>
+        </div>
+    `;
+    document.getElementById("imageUploadActions").style.display = "none";
+}
+
+// Stitch image 1 upload
+setupDragDrop("stitchImage1File", "stitch1UploadPreview", "stitch1UploadPlaceholder", "stitch1UploadInfo",
+    "stitch1ProgressContainer", "stitch1ProgressBar", "stitch1UploadActions",
+    function(dataUrl, file) {
+        stitchImage1Data = dataUrl;
+        document.getElementById("stitch1UploadPreview").innerHTML = `<img src="${dataUrl}" style="position:absolute; width:100%; height:100%; object-fit:cover;"><div class="upload-preview-info">📁 ${file.name}<br>${(file.size / 1024 / 1024).toFixed(2)} MB</div>`;
+        document.getElementById("stitch1UploadActions").style.display = "flex";
+    }
+);
+
+function removeStitchImage(num) {
+    const inputId = num === 1 ? "stitchImage1File" : "stitchImage2File";
+    const previewId = num === 1 ? "stitch1UploadPreview" : "stitch2UploadPreview";
+    const placeholderId = num === 1 ? "stitch1UploadPlaceholder" : "stitch2UploadPlaceholder";
+    const actionsId = num === 1 ? "stitch1UploadActions" : "stitch2UploadActions";
+    
+    if (num === 1) {
+        stitchImage1Data = null;
+    } else {
+        stitchImage2Data = null;
+    }
+    
+    document.getElementById(inputId).value = "";
+    document.getElementById(previewId).innerHTML = `
+        <div class="upload-preview-placeholder" id="${placeholderId}">
+            <div class="icon">📤</div>
+            <span>Click to upload or drag & drop</span>
+            <span style="font-size: 11px; color: #666;">PNG, JPG (${num === 1 ? 'First' : 'Second'} image)</span>
+        </div>
+    `;
+    document.getElementById(actionsId).style.display = "none";
+}
+
+// Stitch image 2 upload
+setupDragDrop("stitchImage2File", "stitch2UploadPreview", "stitch2UploadPlaceholder", "stitch2UploadInfo",
+    "stitch2ProgressContainer", "stitch2ProgressBar", "stitch2UploadActions",
+    function(dataUrl, file) {
+        stitchImage2Data = dataUrl;
+        document.getElementById("stitch2UploadPreview").innerHTML = `<img src="${dataUrl}" style="position:absolute; width:100%; height:100%; object-fit:cover;"><div class="upload-preview-info">📁 ${file.name}<br>${(file.size / 1024 / 1024).toFixed(2)} MB</div>`;
+        document.getElementById("stitch2UploadActions").style.display = "flex";
+    }
+);
+
+// Video upload
+setupDragDrop("videoImageFile", "videoUploadPreview", "videoUploadPlaceholder", "videoUploadInfo",
+    "videoProgressContainer", "videoProgressBar", "videoUploadActions",
+    function(dataUrl, file) {
+        document.getElementById("videoImageUrl").value = dataUrl;
+        document.getElementById("videoUploadPreview").innerHTML = `<img src="${dataUrl}" style="position:absolute; width:100%; height:100%; object-fit:cover;"><div class="upload-preview-info">📁 ${file.name}<br>${(file.size / 1024 / 1024).toFixed(2)} MB</div>`;
+        document.getElementById("videoUploadActions").style.display = "flex";
+    }
+);
+
+function removeVideoUpload() {
+    document.getElementById("videoImageFile").value = "";
+    document.getElementById("videoImageUrl").value = "";
+    document.getElementById("videoUploadPreview").innerHTML = `
+        <div class="upload-preview-placeholder">
+            <div class="icon">📤</div>
+            <span>Click to upload or drag & drop</span>
+            <span style="font-size: 11px; color: #666;">PNG, JPG up to 50MB</span>
+        </div>
+    `;
+    document.getElementById("videoUploadActions").style.display = "none";
+}
+
+// ============ ORIGINAL FUNCTIONS ============
 
 function switchTab(tabName) {
     document.querySelectorAll(".tab-content").forEach(tab => {
@@ -929,19 +1280,7 @@ function clearVideoGallery() {
         loadVideoGallery();
     }
 }
-function uploadVideoImage(event) {
-    const file = event.target.files[0];
-    if (!file) return;
 
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-        document.getElementById("videoImageUrl").value =
-            e.target.result;
-    };
-
-    reader.readAsDataURL(file);
-}
 // Initialize
 loadGallery();
 loadHistory();

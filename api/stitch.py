@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import base64
 import urllib.request
 from http.server import BaseHTTPRequestHandler
 
@@ -24,62 +25,78 @@ class handler(BaseHTTPRequestHandler):
             if not image1 or not image2:
                 raise Exception("Both images are required")
 
-            # Upload base64 images to Replicate file upload endpoint
+            # Upload a single base64 image to Replicate file storage
             def upload_image(b64_data):
-                # Strip data URI prefix if present
                 if "," in b64_data:
-                    b64_data = b64_data.split(",", 1)[1]
-                import base64
+                    header, b64_data = b64_data.split(",", 1)
+                    # Detect mime type
+                    mime = "image/png"
+                    if "jpeg" in header or "jpg" in header:
+                        mime = "image/jpeg"
+                    elif "webp" in header:
+                        mime = "image/webp"
+                else:
+                    mime = "image/png"
+
                 image_bytes = base64.b64decode(b64_data)
                 upload_req = urllib.request.Request(
                     "https://api.replicate.com/v1/files",
                     data=image_bytes,
                     headers={
                         "Authorization": f"Bearer {token}",
-                        "Content-Type": "image/png"
+                        "Content-Type": mime
                     },
                     method="POST"
                 )
                 with urllib.request.urlopen(upload_req) as resp:
                     result = json.loads(resp.read().decode())
-                return result.get("urls", {}).get("get") or result.get("url")
+                url = result.get("urls", {}).get("get") or result.get("url")
+                if not url:
+                    raise Exception("Failed to upload image to Replicate: " + json.dumps(result))
+                return url
 
-            # Only upload if base64, otherwise use as-is (URL)
-            if image1.startswith("data:") or (len(image1) > 500 and not image1.startswith("http")):
+            # Upload both images
+            if image1.startswith("data:") or (len(image1) > 300 and not image1.startswith("http")):
                 image1_url = upload_image(image1)
             else:
                 image1_url = image1
 
-            if image2.startswith("data:") or (len(image2) > 500 and not image2.startswith("http")):
+            if image2.startswith("data:") or (len(image2) > 300 and not image2.startswith("http")):
                 image2_url = upload_image(image2)
             else:
                 image2_url = image2
 
+            # Build a prompt that instructs the model to blend both images
             if direction == "horizontal":
-                stitch_instruction = "Place the first image on the left and the second image on the right, blending them into one seamless wide panoramic image with a smooth natural transition in the middle."
+                stitch_prompt = (
+                    f"A seamless wide panoramic image that smoothly blends two photos side by side "
+                    f"from left to right with a natural transition in the middle. {prompt}"
+                )
+                aspect_ratio = "16:9"
             else:
-                stitch_instruction = "Place the first image on top and the second image on the bottom, blending them into one seamless tall image with a smooth natural transition in the middle."
+                stitch_prompt = (
+                    f"A seamless tall image that smoothly blends two photos stacked top to bottom "
+                    f"with a natural transition in the middle. {prompt}"
+                )
+                aspect_ratio = "9:16"
 
-            full_prompt = (
-                f"{stitch_instruction} "
-                f"First image: {image1_url} "
-                f"Second image: {image2_url} "
-                f"{prompt}"
-            )
-
+            # Use flux-dev with image prompt weights for both source images
             payload = {
+                "version": "black-forest-labs/flux-dev",
                 "input": {
-                    "prompt": full_prompt,
-                    "aspect_ratio": "21:9" if direction == "horizontal" else "9:21",
+                    "prompt": stitch_prompt,
+                    "image_prompt": image1_url,
+                    "image_prompt2": image2_url,
+                    "aspect_ratio": aspect_ratio,
                     "output_format": "webp",
                     "output_quality": 90,
-                    "go_fast": True,
-                    "megapixels": "1"
+                    "num_inference_steps": 28,
+                    "guidance": 3.5
                 }
             }
 
             req = urllib.request.Request(
-                "https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions",
+                "https://api.replicate.com/v1/predictions",
                 data=json.dumps(payload).encode("utf-8"),
                 headers={
                     "Authorization": f"Bearer {token}",
@@ -92,7 +109,7 @@ class handler(BaseHTTPRequestHandler):
             with urllib.request.urlopen(req) as resp:
                 result = json.loads(resp.read().decode())
 
-            # Poll if not complete
+            # Poll until complete (max 120s)
             prediction_url = result.get("urls", {}).get("get")
             for _ in range(60):
                 status = result.get("status")
@@ -116,7 +133,7 @@ class handler(BaseHTTPRequestHandler):
             image_url = output[0] if isinstance(output, list) else output
 
             if not image_url:
-                raise Exception("No image returned from model")
+                raise Exception("No image returned from model. Status: " + str(result.get("status")) + " Error: " + str(result.get("error")))
 
             self.send_response(200)
             self.send_header("Content-Type", "application/json")

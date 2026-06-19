@@ -16,16 +16,16 @@ class handler(BaseHTTPRequestHandler):
             prompt = data.get("prompt", "cinematic motion, smooth camera movement")
             duration = int(data.get("duration", 5))
 
-            if provider == "kling" and duration not in [5, 10]:
-                duration = 10
-
             if provider == "wan":
                 duration = 5
 
-            if provider == "luma" and duration not in [5, 9]:
+            elif provider == "kling" and duration not in [5, 10]:
+                duration = 10
+
+            elif provider == "luma" and duration not in [5, 9]:
                 duration = 9
 
-            if provider == "pixverse" and duration not in [5, 8]:
+            elif provider == "pixverse" and duration not in [5, 8]:
                 duration = 8
 
             if provider == "wan":
@@ -47,21 +47,24 @@ class handler(BaseHTTPRequestHandler):
                 model = "luma/ray-flash-2-720p"
                 input_data = {
                     "image": image,
-                    "prompt": prompt
+                    "prompt": prompt,
+                    "duration": duration
                 }
 
             elif provider == "pixverse":
                 model = "pixverse/pixverse-v5"
                 input_data = {
                     "image": image,
-                    "prompt": prompt
+                    "prompt": prompt,
+                    "duration": duration
                 }
 
             elif provider == "fal":
                 model = "fal-ai/wan-i2v"
                 input_data = {
                     "image_url": image,
-                    "prompt": prompt
+                    "prompt": prompt,
+                    "duration": duration
                 }
 
             elif provider == "replicate":

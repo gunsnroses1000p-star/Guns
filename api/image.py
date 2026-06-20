@@ -1,3 +1,4 @@
+print("IMAGE API LOADED")
 import json
 import os
 import urllib.request

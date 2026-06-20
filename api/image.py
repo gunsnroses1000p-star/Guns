@@ -34,7 +34,7 @@ class handler(BaseHTTPRequestHandler):
             "extra_lora_scale": 1.1,
         }
 
-        if image:
+        if image and image.startswith("http"):
             input_data["image"] = image
 
         payload = {

@@ -37,7 +37,7 @@ class handler(BaseHTTPRequestHandler):
             }
 
             req = urllib.request.Request(
-                "https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions",
+                "https://api.replicate.com/v1/models/black-forest-labs/flux-dev-lora/predictions",
                 data=json.dumps(payload).encode("utf-8"),
                 headers={
                     "Authorization": f"Bearer {token}",

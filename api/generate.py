@@ -29,8 +29,8 @@ class handler(BaseHTTPRequestHandler):
             "aspect_ratio": aspect_ratio,
             "output_format": "webp",
             "output_quality": 80,
-            "lora_weights": "127974bd899cbc1dc6a8f77647d2a6725b64be7ff5bf100cc8a93103467b447a",
-            "lora_scale": 1.1
+            "extra_lora": "gunsnroses1000p-star/gnrwoman01",
+            "extra_lora_scale": 1.1,
         }
 
         if image:

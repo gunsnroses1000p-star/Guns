@@ -55,7 +55,13 @@ class handler(BaseHTTPRequestHandler):
             with urllib.request.urlopen(req) as response:
                 result = json.loads(response.read().decode("utf-8"))
 
-            output = result.get("output")
+            if result.get("error"):
+    raise Exception(result.get("error"))
+
+if result.get("status") == "failed":
+    raise Exception(str(result))
+
+output = result.get("output")
 
 if not output:
     self.send_response(500)

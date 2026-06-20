@@ -22,16 +22,18 @@ class handler(BaseHTTPRequestHandler):
                 prompt = prompt + ". Avoid: " + negative
 
             payload = {
-                "input": {
-                    "prompt": prompt,
-                    "go_fast": True,
-                    "megapixels": "1",
-                    "num_outputs": 1,
-                    "aspect_ratio": aspect_ratio,
-                    "output_format": "webp",
-                    "output_quality": 80,
-                    "image": image,
-                }
+            "input": {
+                "prompt": prompt,
+                "go_fast": True,
+                "megapixels": "1",
+                "num_outputs": 1,
+                "aspect_ratio": aspect_ratio,
+                "output_format": "webp",
+                "output_quality": 80,
+                "image": image,
+                "lora_weights": "127974bd899cbc1dc6a8f77647d2a6725b64be7ff5bf100cc8a93103467b447a",
+                "lora_scale": 1.1
+            }
             }
 
             req = urllib.request.Request(

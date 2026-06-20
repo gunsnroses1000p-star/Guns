@@ -833,21 +833,21 @@ async function generate() {
     downloadBtn.style.display = "none";
 
     try {
-        const response = await fetch("/api/video", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            const payload = {
-            prompt: prompt + " " + style,
-            negative: negative,
-            aspect_ratio: aspect_ratio
+    const payload = {
+    prompt: prompt + " " + style,
+    negative: negative,
+    aspect_ratio: aspect_ratio
 };
 
 if (imageInput && imageInput.startsWith("http")) {
     payload.image = imageInput;
 }
 
-body: JSON.stringify(payload)
-        });
+const response = await fetch("/api/image", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+});
 
         const text = await response.text();
 

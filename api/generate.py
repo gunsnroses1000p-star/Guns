@@ -56,7 +56,18 @@ class handler(BaseHTTPRequestHandler):
                 result = json.loads(response.read().decode("utf-8"))
 
             output = result.get("output")
-            image_url = output[0] if isinstance(output, list) else output
+
+if not output:
+    self.send_response(500)
+    self.send_header("Content-Type", "application/json")
+    self.end_headers()
+    self.wfile.write(json.dumps({
+        "error": "No image returned",
+        "replicate_result": result
+    }).encode())
+    return
+
+image_url = output[0] if isinstance(output, list) else output
 
             self.send_response(200)
             self.send_header("Content-Type", "application/json")

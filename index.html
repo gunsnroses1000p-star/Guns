@@ -833,7 +833,7 @@ async function generate() {
     downloadBtn.style.display = "none";
 
     try {
-        const response = await fetch("/api/image", {
+        const response = await fetch("/api/video", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

@@ -113,7 +113,63 @@ button:hover {
     opacity: 0.8;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 600px) {.tab-content {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 24px;
+    padding: 22px;
+    margin-bottom: 26px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+}
+
+.upload-preview {
+    border: 2px dashed rgba(255, 255, 255, 0.25);
+    border-radius: 18px;
+    padding: 22px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 12px 0;
+}
+
+.upload-preview:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.upload-preview span {
+    display: block;
+    margin-top: 6px;
+    color: #cfc4ff;
+}
+
+input[type="file"] {
+    background: transparent;
+    padding: 8px 0;
+}
+
+h2 {
+    font-size: 32px;
+    margin-top: 10px;
+    margin-bottom: 16px;
+}
+
+label {
+    display: block;
+    font-size: 18px;
+    margin-top: 18px;
+    margin-bottom: 6px;
+    opacity: 0.95;
+}
+
+#status,
+#videoStatus,
+#stitchStatus {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 12px;
+    margin-top: 14px;
+    min-height: 20px;
+    text-align: center;
+}
     .app {
         padding: 12px;
     }

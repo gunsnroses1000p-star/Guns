@@ -723,7 +723,7 @@ async function stitchImages() {
     downloadBtn.style.display = "none";
 
     try {
-        const response = await fetch("/api/stitch", {
+        const response = await fetch("/api/seamless", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

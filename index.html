@@ -6,351 +6,132 @@
 <title>My Replicate AI Generator</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
+    margin: 0;
+    padding: 0;
     font-family: Arial, sans-serif;
-    background: #111;
+    background: linear-gradient(135deg, #090014, #160028, #230044);
     color: white;
+}
+
+.app {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 18px;
+}
+
+h1 {
     text-align: center;
-    padding: 20px;
+    margin-bottom: 6px;
+    font-size: 30px;
 }
 
-h1, h2 {
-    color: #8a2be2;
+.subtitle {
+    text-align: center;
+    opacity: 0.75;
+    margin-bottom: 20px;
 }
 
-textarea, select, input[type="text"] {
-    width: 90%;
-    max-width: 600px;
-    padding: 10px;
-    border-radius: 8px;
+.card {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+textarea,
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
     border: none;
-    font-size: 16px;
-    margin-top: 10px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    font-size: 15px;
 }
 
 textarea {
-    height: 120px;
+    min-height: 120px;
+    resize: vertical;
 }
 
-button, a.download-btn {
-    margin-top: 15px;
-    padding: 12px 25px;
-    font-size: 16px;
+button {
+    width: 100%;
+    padding: 13px;
     border: none;
-    border-radius: 8px;
-    background: #8a2be2;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #8b3dff, #d946ef);
     color: white;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-}
-
-button:hover {
-    background: #6a1be2;
-}
-
-img {
-    max-width: 100%;
-    margin-top: 20px;
-    border-radius: 12px;
-}
-
-label {
-    display: block;
-    margin-top: 20px;
-    font-size: 18px;
-}
-
-#history {
-    margin: 20px 0;
-}
-
-.history-item {
-    background: #222;
-    color: white;
-    padding: 10px;
-    margin: 5px auto;
-    max-width: 600px;
-    border-radius: 8px;
-    cursor: pointer;
-    text-align: left;
-}
-
-.history-item:hover {
-    opacity: 0.8;
-}
-
-.gallery {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 20px;
-}
-
-.gallery img {
-    width: 140px;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.tab-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-}
-
-.tab-btn {
-    padding: 10px 20px;
-    font-size: 14px;
-    border: 2px solid #8a2be2;
-    background: transparent;
-    color: #8a2be2;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.tab-btn.active {
-    background: #8a2be2;
-    color: white;
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-}
-
-.download-item {
-    background: #222;
-    padding: 15px;
-    margin: 10px auto;
-    max-width: 600px;
-    border-radius: 8px;
-    text-align: left;
-}
-
-.download-item img,
-.download-item video {
-    width: 100%;
-    margin-top: 10px;
-    border-radius: 8px;
-}
-
-.download-item-title {
-    color: #8a2be2;
+    font-size: 16px;
     font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.download-links {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    flex-wrap: wrap;
-}
-
-.download-links a {
-    flex: 1;
-    min-width: 100px;
-    text-align: center;
-    padding: 8px;
-    background: #8a2be2;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.download-links a:hover {
-    background: #6a1be2;
-}
-
-.delete-btn {
-    background: #d9534f !important;
-    padding: 8px 15px !important;
-    margin-left: 5px !important;
-}
-
-.delete-btn:hover {
-    background: #c9423f !important;
-}
-
-/* Enhanced upload preview styles */
-.upload-preview-container {
-    max-width: 600px;
-    margin: 20px auto;
-}
-
-.upload-preview {
-    width: 100%;
-    height: 250px;
-    border: 3px dashed #8a2be2;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
-    background: #1a1a1a;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.upload-preview:hover {
-    border-color: #a040ff;
-    background: #222;
-}
-
-.upload-preview.drag-over {
-    border-color: #a040ff;
-    background: #2a1a3a;
-    transform: scale(1.02);
-}
-
-.upload-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 9px;
-    margin: 0;
-}
-
-.upload-preview-placeholder {
-    text-align: center;
-    color: #8a2be2;
-}
-
-.upload-preview-placeholder span {
-    display: block;
-    margin: 10px 0;
-    font-size: 14px;
-}
-
-.upload-preview-placeholder .icon {
-    font-size: 48px;
-    margin-bottom: 10px;
-}
-
-.upload-preview-info {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.85);
-    padding: 10px;
-    color: #8a2be2;
-    font-size: 12px;
-    max-height: 60px;
-    overflow: hidden;
-}
-
-.upload-preview-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 15px;
-}
-
-.upload-preview-actions button {
-    padding: 8px 16px;
-    font-size: 14px;
-    margin: 0;
-}
-
-.remove-btn {
-    background: #d9534f !important;
-}
-
-.remove-btn:hover {
-    background: #c9423f !important;
-}
-
-.replace-btn {
-    background: #5cb85c !important;
-}
-
-.replace-btn:hover {
-    background: #4cae4c !important;
-}
-
-.progress-bar-container {
-    width: 100%;
-    height: 4px;
-    background: #333;
-    border-radius: 2px;
-    margin-top: 10px;
-    overflow: hidden;
-    display: none;
-}
-
-.progress-bar-container.active {
-    display: block;
-}
-
-.progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #8a2be2, #a040ff);
-    width: 0%;
-    transition: width 0.3s ease;
-    border-radius: 2px;
-}
-
-.upload-hint {
-    font-size: 12px;
-    color: #999;
     margin-top: 8px;
 }
 
-.image-preview {
-    width: 150px;
-    height: 150px;
-    border: 2px dashed #8a2be2;
-    border-radius: 8px;
+button:hover {
+    opacity: 0.9;
+}
+
+.tabs {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 10px auto;
-    cursor: pointer;
-    background: #1a1a1a;
-    overflow: hidden;
+    gap: 10px;
+    margin-bottom: 18px;
 }
 
-.image-preview img {
+.tabs button {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.tabs button.active {
+    background: linear-gradient(135deg, #8b3dff, #d946ef);
+}
+
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+}
+
+.gallery img,
+.gallery video {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 6px;
-    margin: 0;
+    border-radius: 14px;
+    display: block;
 }
 
-.image-preview span {
+.status {
     text-align: center;
-    color: #8a2be2;
-    font-size: 12px;
+    margin-top: 12px;
+    opacity: 0.8;
 }
 
-.stitch-options {
-    background: #1a1a1a;
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 20px;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+@media (max-width: 600px) {
+    .app {
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .tabs {
+        flex-direction: column;
+    }
 }
 
-.stitch-options label {
-    margin-top: 10px;
-}
 
-.hidden-file-input {
-    display: none;
-}
+
+
+
+
 </style>
 </head>
 

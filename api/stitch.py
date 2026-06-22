@@ -75,6 +75,9 @@ Create one continuous environment with matching lighting, shadows, colors, camer
 Remove any visible split, border, fade line, or collage effect.
 Make it look like one natural professional photograph.
 Photorealistic, cinematic, ultra detailed, realistic skin texture, natural proportions.
+The subject must have two complete arms, two complete hands, correct anatomy, realistic proportions, and natural body positioning.
+Do not crop, merge, duplicate, remove, or distort limbs.
+Preserve full body structure and accurate human anatomy.
 """
                 aspect_ratio = "9:16"
 
@@ -89,7 +92,7 @@ Photorealistic, cinematic, ultra detailed, realistic skin texture, natural propo
                     "output_format": "webp",
                     "output_quality": 90,
                     "num_inference_steps": 28,
-                    "guidance": 3.5
+                    "guidance": 6
                 }
             }
 

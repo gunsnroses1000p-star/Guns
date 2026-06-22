@@ -75,9 +75,11 @@ Create one continuous environment with matching lighting, shadows, colors, camer
 Remove any visible split, border, fade line, or collage effect.
 Make it look like one natural professional photograph.
 Photorealistic, cinematic, ultra detailed, realistic skin texture, natural proportions.
-"""
+The subject must have two complete arms, two complete hands, correct anatomy, realistic proportions, and natural body positioning.
+Do not crop, merge, duplicate, remove, or distort limbs.
+Preserve full body structure and accurate human anatomy.
                 aspect_ratio = "9:16"
-
+"""
             # Use flux-dev with image prompt weights for both source images
             payload = {
                 "version": "black-forest-labs/flux-dev",

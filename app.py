@@ -3,11 +3,7 @@ import replicate
 import tempfile
 import os
 
-# IMPORTANT:
-# Add your Replicate API key in Hugging Face Space:
-# Settings → Variables → REPLICATE_API_TOKEN
-
-MODEL_NAME = "luma/dream-machine"  # Change to any Replicate model you want
+MODEL_NAME = "luma/dream-machine"
 
 def generate_video(image):
     # Save uploaded image to a temporary file
@@ -18,14 +14,13 @@ def generate_video(image):
     # Call Replicate model
     output = replicate.run(
         MODEL_NAME,
-        input={"image": image, "prompt": prompt}
+        input={
             "image": open(image_path, "rb"),
             "num_frames": 40,
             "fps": 15
         }
     )
 
-    # Replicate returns a URL to the generated video
     return output
 
 demo = gr.Interface(

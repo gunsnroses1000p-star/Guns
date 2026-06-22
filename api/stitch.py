@@ -78,6 +78,11 @@ Photorealistic, cinematic, ultra detailed, realistic skin texture, natural propo
 The subject must have two complete arms, two complete hands, correct anatomy, realistic proportions, and natural body positioning.
 Do not crop, merge, duplicate, remove, or distort limbs.
 Preserve full body structure and accurate human anatomy.
+Keep the woman from image 1 exactly.
+Use image 2 only as a reference for outfit, pose, environment, lighting, and style.
+Generate a completely new image.
+Do not place images side by side.
+Do not blend images together.
 """
                 aspect_ratio = "9:16"
 

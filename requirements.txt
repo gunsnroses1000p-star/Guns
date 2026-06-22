@@ -1,7 +1,0 @@
-gradio
-huggingface_hub
-requests
-python-dotenv
-Pillow
-fal-client
-replicate

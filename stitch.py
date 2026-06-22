@@ -91,7 +91,7 @@ Preserve full body structure and accurate human anatomy.
                     "output_format": "webp",
                     "output_quality": 90,
                     "num_inference_steps": 28,
-                    "guidance": 3.5
+                    "guidance": 6
                 }
             }
 

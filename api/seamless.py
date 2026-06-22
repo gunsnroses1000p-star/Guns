@@ -67,7 +67,7 @@ class handler(BaseHTTPRequestHandler):
 
             seamless_prompt = f"""
 Create one seamless realistic photograph from this image.
-Only repaint the masked middle area.
+Repaint the entire masked area strongly. Create one shared environment, not two different locations.
 Blend both sides into one continuous natural scene.
 Remove the visible split, border, seam, fade line, or collage effect.
 Match lighting, shadows, perspective, colors, background, and depth of field.

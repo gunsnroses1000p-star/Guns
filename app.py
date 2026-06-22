@@ -18,7 +18,7 @@ def generate_video(image):
     # Call Replicate model
     output = replicate.run(
         MODEL_NAME,
-        input={
+        input={"image": image, "prompt": prompt}
             "image": open(image_path, "rb"),
             "num_frames": 40,
             "fps": 15

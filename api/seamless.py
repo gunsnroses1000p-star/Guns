@@ -13,12 +13,12 @@ class handler(BaseHTTPRequestHandler):
             length = int(self.headers.get("Content-Length", 0))
             data = json.loads(self.rfile.read(length).decode("utf-8"))
 
-            image1 = data.get("image1")
-            image2 = data.get("image2")
+            stitch_image1 = data.get("image1")
+            stitch_image2 = data.get("image2")
             prompt = data.get("prompt", "")
             direction = data.get("direction", "horizontal")
 
-            if not image1 or not image2:
+            if not stitch_image1 or not stitch_image2:
                 raise Exception("Missing image1 or image2")
 
             def load_image(src):
@@ -28,8 +28,8 @@ class handler(BaseHTTPRequestHandler):
                 with urllib.request.urlopen(src) as r:
                     return Image.open(BytesIO(r.read())).convert("RGB")
 
-            img1 = load_image(image1)
-            img2 = load_image(image2)
+            img1 = load_image(stitch_image1)
+            img2 = load_image(stitch_image2)
 
             if direction == "horizontal":
                 size = (768, 768)

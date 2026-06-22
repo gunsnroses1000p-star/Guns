@@ -67,17 +67,15 @@ class handler(BaseHTTPRequestHandler):
                 image2_url = image2
 
             # Build a prompt that instructs the model to blend both images
-            if direction == "horizontal":
-                stitch_prompt = (
-                    f"A seamless wide panoramic image that smoothly blends two photos side by side "
-                    f"from left to right with a natural transition in the middle. {prompt}"
-                )
-                aspect_ratio = "16:9"
-            else:
-                stitch_prompt = (
-                    f"A seamless tall image that smoothly blends two photos stacked top to bottom "
-                    f"with a natural transition in the middle. {prompt}"
-                )
+            prompt = """
+Combine these two images into one single realistic seamless photo.
+Use the left image as the main base scene.
+Preserve the woman's face, body, hairstyle, and identity from the images.
+Create one continuous environment with matching lighting, shadows, colors, camera angle, and depth of field.
+Remove any visible split, border, fade line, or collage effect.
+Make it look like one natural professional photograph.
+Photorealistic, cinematic, ultra detailed, realistic skin texture, natural proportions.
+"""
                 aspect_ratio = "9:16"
 
             # Use flux-dev with image prompt weights for both source images

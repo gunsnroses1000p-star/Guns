@@ -42,7 +42,7 @@ class handler(BaseHTTPRequestHandler):
 
                 mask = Image.new("RGB", (1536, 768), "black")
                 draw = ImageDraw.Draw(mask)
-                draw.rectangle((620, 0, 916, 768), fill="white")
+                draw.rectangle((430, 0, 1106, 768), fill="white")
 
                 aspect_ratio = "16:9"
             else:
@@ -56,7 +56,7 @@ class handler(BaseHTTPRequestHandler):
 
                 mask = Image.new("RGB", (768, 1536), "black")
                 draw = ImageDraw.Draw(mask)
-                draw.rectangle((0, 620, 768, 916), fill="white")
+                draw.rectangle((0, 430, 768, 1106), fill="white")
 
                 aspect_ratio = "9:16"
 
